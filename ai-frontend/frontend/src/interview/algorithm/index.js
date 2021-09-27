@@ -1,0 +1,7 @@
+export {default as NavigationA} from 'interview/algorithm/components/navigationA'
+export {default as Algorithm} from 'interview/algorithm/pages/Algorithm'
+export {default as BruteForce} from 'interview/algorithm/pages/BruteForce'
+export {default as DivideConquer} from 'interview/algorithm/pages/DivideConquer'
+export {default as Greedy} from 'interview/algorithm/pages/Greedy'
+export {default as DynamicProgramming} from 'interview/algorithm/pages/DynamicProgramming'
+export {default as BackTracking} from 'interview/algorithm/pages/BackTracking'
