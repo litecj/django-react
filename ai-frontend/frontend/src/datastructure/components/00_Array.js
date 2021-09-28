@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import {TrappingRainWater} from 'interview/datastructure'
+import {TrappingRainWater} from 'datastructure'
 const Array = () => {
     return (<>
     <div>Array</div>

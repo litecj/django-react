@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import { NavigationA } from 'interview/algorithm'
+import { NavigationA } from 'algorithm'
 const Algorithm = () => {
     return (<>
     <div>

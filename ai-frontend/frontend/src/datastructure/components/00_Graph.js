@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import {NumberOfIslands} from 'interview/datastructure'
+import {NumberOfIslands} from 'datastructure'
 
 const Graph = () => {
     return (<>

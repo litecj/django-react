@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import { NavigationD } from 'interview/datastructure'
+import { NavigationD } from 'datastructure'
 
 const DateStructure = () => {
     return (<>

@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import { ValidParentheses } from 'interview/datastructure'
+import { ValidParentheses } from 'datastructure'
 
 const StackQueue = () => {
     return (<>

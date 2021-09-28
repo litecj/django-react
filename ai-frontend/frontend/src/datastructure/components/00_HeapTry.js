@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import {ImplementTrie} from 'interview/datastructure'
+import {ImplementTrie} from 'datastructure'
 
 export default function HeapTry () {
     return(<>

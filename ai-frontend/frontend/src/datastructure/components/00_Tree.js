@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Switch, Route, Redirect } from 'react-router'
-import {LongestUnivaluePath} from 'interview/datastructure'
+import {LongestUnivaluePath} from 'datastructure'
 
 const Tree = () => {
     return (<>
