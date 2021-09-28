@@ -2,17 +2,19 @@
 // import './App.css';
 import React from "react"
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { Navigation,  Home} from 'interview/common'
+import { Navigation, Home, Counter, ToDo} from 'interview/common'
 import {Algorithm, BruteForce, DivideConquer, Greedy, DynamicProgramming, BackTracking} from 'interview/algorithm'
 import {DateStructure, Math, LinearData, Array, List, NonLinearData, Graph, Tree} from 'interview/datastructure'
 
 const App = () => (<>
   <div>
-    <Navigation/>
     <header>
+    <Navigation/>
     <Switch>
       <Route exact path='/' component={Home}/>
       <Redirect from = 'home' to={'/'}/>
+      <Route exact path='/hook' component={Counter}/>
+      <Route exact path='/todo' component={ToDo}/>
 
       <Route exact path ='/data-structure' component={DateStructure}/>
       <Route exact path ='/data-structure/math' component={Math}/>

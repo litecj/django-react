@@ -19,15 +19,15 @@ const StackQueue = () => {
                 <td></td>
             </tr>
             <tr>
-                <td>023.</td>
+                <td>023.Implement Stack using Queues</td>
                 <td></td>
             </tr>
             <tr>
-                <td>024.</td>
+                <td>024.Implement Queues using Stack</td>
                 <td></td>
             </tr>
             <tr>
-                <td>025.</td>
+                <td>025.Design Circular Queue</td>
                 <td></td>
             </tr>
         </table>

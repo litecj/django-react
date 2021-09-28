@@ -1,4 +1,3 @@
-import { FiberPin } from '@material-ui/icons'
 
 export {default as NavigationD} from 'interview/datastructure/components/00_NavigationD'
 export {default as DateStructure} from 'interview/datastructure/pages/DateStructure'
