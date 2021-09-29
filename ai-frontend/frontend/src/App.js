@@ -2,15 +2,15 @@
 // import './App.css';
 import React from "react"
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { Navigation, Home, Counter, ToDo, SignIn} from 'common'
+import { Navigation, Home, Counter, ToDo, SignIn, SignUp} from 'common'
 import {Algorithm, BruteForce, DivideConquer, Greedy, DynamicProgramming, BackTracking} from 'algorithm'
 import {DateStructure, Math, LinearData, Array, List, NonLinearData, Graph, Tree} from 'datastructure'
 
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-import { todoReducer, userReducer } from 'reducers'
+import { todoReducer, userReducer, userUpReducer } from 'reducers'
 
-const rootReducer = combineReducers({todoReducer, userReducer})
+const rootReducer = combineReducers({todoReducer, userReducer, userUpReducer})
 const store = createStore(rootReducer)
 
 const App = () => (<>
@@ -23,6 +23,7 @@ const App = () => (<>
         <Route exact path='/hook' component={Counter}/>
         <Route exact path='/todo' component={ToDo}/>
         <Route exact path='/sign-in' component={SignIn}/>
+        <Route exact path='/sign-up' component={SignUp}/>
 
         <Route exact path ='/data-structure' component={DateStructure}/>
         <Route exact path ='/data-structure/math' component={Math}/>

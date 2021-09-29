@@ -19,7 +19,7 @@ import { addUserAction } from 'reducers/user.reducer';
 
 const theme = createTheme();
 
-export default function UserJoin() {
+export default function UserJoinUp() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const dispatch = useDispatch()
@@ -73,6 +73,7 @@ export default function UserJoin() {
               required
               fullWidth
               id="email"
+              type="text"
               label="Email Address"
               name="email"
               autoComplete="email"
@@ -86,7 +87,7 @@ export default function UserJoin() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type="text"
               id="password"
               value={password}
               autoComplete="current-password"
