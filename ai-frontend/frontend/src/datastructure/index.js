@@ -15,37 +15,3 @@ export {default as NumberOfIslands} from 'datastructure/components/N032_NumberOf
 export {default as LongestUnivaluePath} from 'datastructure/components/N044_LongestUnivaluePath'
 export {default as ImplementTrie} from 'datastructure/components/N056_ImplementTrie'
 
-// import {TrappingRainWater, ValidParentheses, NumberOfIslands, LongestUnivaluePath, ImplementTrie} from 'interview/datastructure'
-
-
-
-{/* <table>
-            <tr>
-                <td>013.Palindrome Linked List</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>014. </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>015.</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>016.</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>017.</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>018.</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>019.</td>
-                <td></td>
-            </tr>
-        </table> */}

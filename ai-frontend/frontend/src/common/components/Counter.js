@@ -15,7 +15,7 @@ export default function Counter () {
     return (<>
         <div>
             <CounterDiv>
-                {count == 0 &&
+                {count === 0 &&
                     <Stack sx={{ width: '50%', margin: '0 auto' }} spacing={2}>
                     <Alert severity="error">
                         <AlertTitle>Error</AlertTitle>

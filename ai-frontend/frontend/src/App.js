@@ -2,28 +2,27 @@
 // import './App.css';
 import React from "react"
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { Navigation, Home, Counter, ToDo} from 'common'
+import { Navigation, Home, Counter, ToDo, SignIn} from 'common'
 import {Algorithm, BruteForce, DivideConquer, Greedy, DynamicProgramming, BackTracking} from 'algorithm'
 import {DateStructure, Math, LinearData, Array, List, NonLinearData, Graph, Tree} from 'datastructure'
 
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-import { todoReducer } from 'reducers'
+import { todoReducer, userReducer } from 'reducers'
 
-const rootReducer = combineReducers({todoReducer})
+const rootReducer = combineReducers({todoReducer, userReducer})
 const store = createStore(rootReducer)
 
 const App = () => (<>
   <div>
     <Provider store={store}>
-      <header>
-
       <Navigation/>
       <Switch>
         <Route exact path='/' component={Home}/>
         <Redirect from = 'home' to={'/'}/>
         <Route exact path='/hook' component={Counter}/>
         <Route exact path='/todo' component={ToDo}/>
+        <Route exact path='/sign-in' component={SignIn}/>
 
         <Route exact path ='/data-structure' component={DateStructure}/>
         <Route exact path ='/data-structure/math' component={Math}/>
@@ -42,31 +41,9 @@ const App = () => (<>
         <Route exact path ='/algorithom/back-tracking' component={BackTracking}/>
 
       </Switch>
-
-      </header>
     </Provider>
   </div>
 
 </>)
-{/* function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-} */}
 
 export default App;

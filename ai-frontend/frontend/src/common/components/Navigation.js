@@ -9,6 +9,8 @@ const  Navigation = () => {
                     <ul><NaviItem><Link to= '/home'>Home</Link></NaviItem></ul>
                     <ul><NaviItem><Link to= '/hook'>HOOK</Link></NaviItem></ul>
                     <ul><NaviItem><Link to= '/todo'>TODO</Link></NaviItem></ul>
+                    <ul><NaviItem><Link to= '/sign-in'>Sign In</Link></NaviItem></ul>
+                    {/* <ul><NaviItem><Link to= '/sign-up'>Sign Up</Link></NaviItem></ul> */}
                     <ul>
                         <NaviItem><Link to= '/data-structure'>Date Structure</Link></NaviItem>
                         {/* <li><button><Link to= '/data-structure/math'>Math</Link></button></li>
