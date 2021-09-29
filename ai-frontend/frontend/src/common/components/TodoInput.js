@@ -1,31 +1,45 @@
-import React, {useState} from 'react'
+import React, {useState} from "react";
+import { useDispatch } from "react-redux";
+import { v4 as uuidv4} from 'uuid'
 import styled from 'styled-components'
+import { addTodoAction } from 'reducers'
 
-export default function ToDo () {
+export default function TodoInput () {
 
     const [todo, setTodo] = useState('')
 
-    let hello = ''
-
-    const add = e => {
-        e.preventDefault()
-        // setTodo(e.target.value) : 실시간 반영
-        hello = e.target.value
-    }
+    const dispatch = useDispatch
 
     const submitForm = e => {
         e.preventDefault()
-        setTodo(hello)
-        document.getElementById('todo-input').value =''
-        
+        const newTodo = {
+            id : uuidv4(),
+            name : todo,
+            complete:false
+        }
+        addTodo(newTodo)
+        setTodo('')
+    }
+
+    const addTodo = todo => dispatch(addTodoAction(todo))
+
+    const handleChange = e => {
+        e.preventDefault()
+        setTodo(e.target.value)
     }
 
     return (<>
     <div>
         <form onSubmit={submitForm} method='post'>
             <TodoDiv>
-                <input type='text'  id='todo-input' onChange={add} />
-                <input type='submit' value='ADD'/> 
+                <input type='text'
+                        id='todo-input'
+                        placeholder = "todo?"
+                        value = {todo}
+                        onChange={handleChange} />
+                <input type='submit'
+                        value='ADD'/> 
+                <br/>
                 {/* <TextField id="standard-basic" label="Standard" variant="standard" />
                 <Button onChange={(handleChange)}>ADD</Button> */}
             </TodoDiv>
