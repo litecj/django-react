@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,7 +14,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { addUserAction } from 'reducers/user.reducer';
+// import { addUserAction } from 'reducers/user.reducer';
+import { userRetriever } from 'api';
 
 
 const theme = createTheme();
@@ -22,12 +23,13 @@ const theme = createTheme();
 export default function UserJoin() {
     const [user, setUser] = useState({
       username: '',
+      name: '',
       birth: '',
       address: '',
       email: '',
       password: ''
     })
-    const {username, birth, address, email, password} = `user`
+    const {username, name, birth, address, email, password} = `user`
     //user이라는 주소값을 불러야 하기에 백포인트
 
     // 위의 줄과 동일한 내용 : java style
@@ -36,7 +38,7 @@ export default function UserJoin() {
     // const [address, setAdress] = useState('')
     // const [email, setEmail] = useState('')
     // const [password, setPassword] = useState('')
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     
     const handleSubmit = e => {
         e.preventDefault();
@@ -49,14 +51,18 @@ export default function UserJoin() {
         // const payload = {email, password, username, birth, address}
             // = email: email, password:password = 동일 명칭이라 생략함
         alert(`가입회원 정보: ${JSON.stringify(user)}`)
-        addUser(user)
+        userRetriever({...user})
+        .then(res => {alert(`회원 가입 완료: ${res.data.result}`)})
+        .catch(err => {alert(`회원가입 실패: ${err}`)})
+        //...user vs user : 전부 입력 시 상관 無 BUT 비필수 항목 하나라도 있으면 must ...user
+        // addUser(user)    : userRetriever({...user})로 함으로써 DB와 연결
         // setEmail('')
         // setPassword('')
         // setUsername('')
         // setBirth('')
         // setAdress('')
     }
-    const addUser = user => dispatch(addUserAction(user))  
+    // const addUser = user => dispatch(addUserAction(user))  
     // dispatch 함수 中 액션 생성 합수 : addUserAction(--)
     // const addUser = user => / {return}  = () / /dispatch 사용 이유 : 리액트에서 리덕스 공간으로 이동 시키기 위해
     const handleChange = e =>{
@@ -119,8 +125,19 @@ export default function UserJoin() {
               label="username"
               type="text"
               id="username"
-              autoComplete="name"
               value={username}
+              autoFocus
+              onChange={handleChange}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="name"
+              label="name"
+              type="text"
+              id="name"
+              value={name}
               autoFocus
               onChange={handleChange}
             />
@@ -157,7 +174,6 @@ export default function UserJoin() {
               type="text"
               id="birth"
               value={birth}
-              autoComplete="birth"
               autoFocus
               onChange={handleChange}
             />
@@ -170,7 +186,6 @@ export default function UserJoin() {
               type="text"
               id="address"
               value={address}
-              autoComplete="address"
               autoFocus
               onChange={handleChange}
             />

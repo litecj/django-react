@@ -6,7 +6,7 @@ const  Navigation = () => {
     return(
         <NaviDiv>
             <NaviList>
-                    <ul><NaviItem><Link to= '/home'>Home</Link></NaviItem></ul>
+                    <ul><NaviItem><Link to= '/home'>INTERVIEW</Link></NaviItem></ul>
                     <ul><NaviItem><Link to= '/hook'>HOOK</Link></NaviItem></ul>
                     <ul><NaviItem><Link to= '/todo'>TODO</Link></NaviItem></ul>
                     <ul><NaviItem><Link to= '/sign-in'>Sign In</Link></NaviItem></ul>
@@ -72,13 +72,13 @@ const NaviList = styled.ul`
     display: flex;
     width: min-content;
     height:10px;
-    margin: 30px
+    margin: auto;
     
 `
 
 const NaviDiv = styled.div`
     padding-bottom: 30px;
-    margin-bottom: 100px;
+    margin-bottom: auto;
     
 `
 

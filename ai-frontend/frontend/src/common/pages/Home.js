@@ -9,7 +9,8 @@ import { SignIn } from 'common'
 
 export default function Home () {
     return (<>
-    <div>interview</div>
+    <div style={{margin:'10px', textAlign: 'center'}}>interview</div>
+    <br/>
     <SignIn/>
      </>)
 }
