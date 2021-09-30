@@ -65,7 +65,7 @@ export default function UserJoin() {
     // const addUser = user => dispatch(addUserAction(user))  
     // dispatch 함수 中 액션 생성 합수 : addUserAction(--)
     // const addUser = user => / {return}  = () / /dispatch 사용 이유 : 리액트에서 리덕스 공간으로 이동 시키기 위해
-    const handleChange = e =>{
+    const handleChange = e => {
           e.preventDefault()
           const {name, value} = e.target
           setUser({

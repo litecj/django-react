@@ -16,11 +16,11 @@ def users(request):
     if request.method == 'GET':
         all_users = UserVo.objects.all()
         serializer = UserSerializer(all_users, many=True)
-        return JsonResponse(data=serializer, safe=False)
+        return JsonResponse(data = serializer, safe = False)
     elif request.method == 'POST':
         new_user = request.data['body']
         print(new_user)
-        serializer = UserSerializer(data=new_user)
+        serializer = UserSerializer(data = new_user)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse({'result' : f'Welcome, {serializer.data.get("name")}'}, staus=201)

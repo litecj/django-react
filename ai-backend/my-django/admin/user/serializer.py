@@ -14,14 +14,14 @@ class UserSerializer(serializers.Serializer):
         model = user
         fileds = '__all__'
 
-    def create(self, validated_data):
-        return user.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        user.objects.filter(pk=instance.username).update(**validated_data)
-
-    # def create(self, valided_data):
-    #     return user.objects.create(**valided_data)
+    # def create(self, validated_data):
+    #     return user.objects.create(**validated_data)
     #
-    # def update(self, instance, valided_data):
-    #     user.objects.filter(pk=instance.username).update(**valided_data)
+    # def update(self, instance, validated_data):
+    #     user.objects.filter(pk=instance.username).update(**validated_data)
+
+    def create(self, valided_data):
+        return user.objects.create(**valided_data)
+
+    def update(self, instance, valided_data):
+        user.objects.filter(pk=instance.username).update(**valided_data)
