@@ -69,7 +69,7 @@ const  Navigation = () => {
 export default Navigation
 
 const NaviList = styled.ul`
-    // display: flex;
+    display: flex;
     width: min-content;
     height:10px;
     margin: 30px
@@ -86,7 +86,7 @@ const NaviItem = styled.li`
     width: 110px;
     color: none;
     font-family: "ls";
-    font-size: 1.5em;
+    font-size: 1em;
     list-style: none;
     textDecorationLine:'none'
     color:'black'
