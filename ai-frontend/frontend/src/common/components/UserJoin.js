@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // import { addUserAction } from 'reducers/user.reducer';
-import { userRetriever } from 'api';
+import { userRegister } from 'api';
 
 
 const theme = createTheme();
@@ -51,7 +51,7 @@ export default function UserJoin() {
         // const payload = {email, password, username, birth, address}
             // = email: email, password:password = 동일 명칭이라 생략함
         alert(`가입회원 정보: ${JSON.stringify(user)}`)
-        userRetriever({...user})
+        userRegister({user})
         .then(res => {alert(`회원 가입 완료: ${res.data.result}`)})
         .catch(err => {alert(`회원가입 실패: ${err}`)})
         //...user vs user : 전부 입력 시 상관 無 BUT 비필수 항목 하나라도 있으면 must ...user
