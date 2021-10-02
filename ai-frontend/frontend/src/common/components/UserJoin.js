@@ -30,7 +30,7 @@ export default function UserJoin() {
       password: ''
     })
     const {username, name, birth, address, email, password} = `user`
-    //user이라는 주소값을 불러야 하기에 백포인트
+    //user이라는 주소값을 불러야 하기에 백틱
 
     // 위의 줄과 동일한 내용 : java style
     // const [username, setUsername] = useState('')
