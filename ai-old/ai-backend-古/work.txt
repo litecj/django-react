@@ -1,0 +1,3 @@
+폴더 만들 때
+cd admin 으로 admin 위치로 들어간 후, 
+admin>django-admin startapp ____내가 만들 폴더 이름_________
