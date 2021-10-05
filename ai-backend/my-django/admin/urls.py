@@ -21,6 +21,7 @@ from admin. user import views
 
 urlpatterns = [
     path('api/connect', include('admin.common.urls')),
+    path('api/housing/', include('admin.housing.urls')),
     path('api/users/', include('admin.user.urls')),
 ]
 #
