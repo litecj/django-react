@@ -54,48 +54,27 @@ class CrimeCctvModel():
             station_lats.append(temp_loc['location']['lat'])
             station_lngs.append(temp_loc['location']['lng'])
             print(f' {name} : {temp[0].get("formatted_address")}')
+            print(f'{name} : {temp[0].get("formatted_address")}')
         gu_names = []
         for name in station_addrs:
             temp = name.split()
             gu_name = [gu for gu in temp if gu[-1] == '구'][0]
             gu_names.append(gu_name)
-        crime['구별'] = gu_names
+        crime['구별'] = gu_names # '구별'이라는 '열' 자동 생성 (존재하지 않기 때문)/ 이미 있을 경우 덮어 쓰기
+        crime['위도'] = station_lats
+        crime['경도'] = station_lngs
         # 구와 경찰서의 위치가 다른 경우 수작업
-        crime.loc[crime['관서명'] == '혜화서', ['구별']] = '종로구'
+        crime.loc[crime['관서명'] == '혜화서', ['구별']] == '종로구'  # 비교 구분
+        crime.loc[crime['관서명'] == '혜화서', ['구별']] = '종로구'  # 값 삽입 및 변경
         crime.loc[crime['관서명'] == '서부서', ['구별']] = '은평구'
         crime.loc[crime['관서명'] == '강서서', ['구별']] = '양천구'
         crime.loc[crime['관서명'] == '종암서', ['구별']] = '성북구'
         crime.loc[crime['관서명'] == '방배서', ['구별']] = '서초구'
         crime.loc[crime['관서명'] == '수서서', ['구별']] = '강남구'
-        # crime, loc, crime['관서명'] : df
-        crime.to_csv(self.dfg.context+'new_data/police_position.csv')
+        # crime, loc, crime['관서명'] : dataframe
+        crime.to_csv(self.dfg.context+'new_data/police_position(1).csv')
 
 
-
-
-class CrimeSeoulService(object):
-
-    def __init__(self):
-        self.dfg = DFrameGenerator()
-        self.dfg.fname = 'admin/crime_seoul/data/CCTV_in_Seoul.csv'
-        self.model = self.dfg.create_model()
-
-    # def make_df(self):
-    #     name = ''
-    #     test1 = None
-    #     test2 = None
-    #     test3 = []
-    #     result = None
-    #     ls =
-    #         ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구',
-    #           '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구']
-
-    def crime_info(self):
-        self.dfg.model_info(self.model)
-
-    def crime_hist(self)-> object:
-        self.model.hist(bins=50, figsize=(20, 15))
-        plt.savefig('admin/crime_seoul/image/crime_hist.png')
 
 # class CrimeSeoul(models.Model): # DB에 저장할 의사 없음 → 필요 없음
 #
@@ -108,5 +87,5 @@ class CrimeSeoulService(object):
 #             return f'[{self.pk}] {self.id}'
 
 if __name__ == '__main__':  # test 없이 바로 실행 해보는 코드
-    h = CrimeSeoulService()
+    h = CrimeCctvModel()
     ic(h.new_model())
