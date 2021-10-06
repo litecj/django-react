@@ -38,7 +38,7 @@ class HousingService(object):
     #     ic(model.describe())
 
     def split_model(self)->[]:  # 그냥 임의로 값을 나눈 것 / train_test_split = 함수(앞이 소문자)
-        train_set, test_set = train_test_split(self.model, test_size=0.2, random_state=42)
+        train_set, test_set = train_test_split(self.model, test_size=0.2, random_state=42) # 'self.model'에서 42(난수 초기값)를 기준으로 20%
         print('*' * 100)
         self.dfg.model_info(train_set)
         print('#' * 100)
