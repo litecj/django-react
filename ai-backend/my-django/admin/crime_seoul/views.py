@@ -33,3 +33,7 @@ def create_cctv_model(request):
 def create_population_model(request):
     CrimeCctvModel().create_population_model()
     return JsonResponse({'result': 'Create Population Model SUCCESS'})
+
+def jion_crime_cctv_model(request):
+    CrimeCctvModel().jion_crime_cctv_model()
+    return JsonResponse({'result': 'Jion Crime Cctv Model SUCCESS'})

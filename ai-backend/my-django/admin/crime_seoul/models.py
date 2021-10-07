@@ -1,3 +1,4 @@
+import pandas as pd
 from django.db import models
 
 # Create your models here.
@@ -62,8 +63,8 @@ class CrimeCctvModel():
             gu_name = [gu for gu in temp if gu[-1] == '구'][0]
             gu_names.append(gu_name)
         crime['구별'] = gu_names # '구별'이라는 '열' 자동 생성 (존재하지 않기 때문)/ 이미 있을 경우 덮어 쓰기
-        crime['위도'] = station_lats
-        crime['경도'] = station_lngs
+        # crime['위도'] = station_lats
+        # crime['경도'] = station_lngs
         # 구와 경찰서의 위치가 다른 경우 수작업 / 구글에서 바로 가져오기에
         # crime.loc[crime['관서명'] == '혜화서', ['구별']] == '종로구'  # 비교 구분
         # crime.loc[crime['관서명'] == '혜화서', ['구별']] = '종로구'  # 값 삽입 및 변경
@@ -76,7 +77,7 @@ class CrimeCctvModel():
         print(f"샘플 정보 확인 : {crime[crime['관서명'] == '금천서']}")
         # crime, loc, crime['관서명'] : dataframe
         # crime.to_csv(self.dfg.context+'new_data/police_position(1).csv')  # 주소(변형된, new-model) 한번 저장 후, 주석 처리
-
+        return crime
 
     def create_cctv_model(self):
         generator = self.dfg
@@ -93,8 +94,18 @@ class CrimeCctvModel():
         cctv_model.rename(columns={'기관명':'구별'}, inplace=True)
         # cctv_model['기관명'] = cctv_model['구별']
 
-        cctv_model.to_csv(self.dfg.context+'new_data/cctv_model.csv')
+        # cctv_model.to_csv(self.dfg.context+'new_data/cctv_model.csv')
         return cctv_model
+
+
+    def jion_crime_cctv_model(self):
+        d1 = self.create_police_position()
+        d2 = self.create_cctv_model()
+        # d1 = pd.read_csv('../new_data/cctv_model.csv', delimiter=',')
+        # d2 = pd.read_csv('../new_data/police_position.csv', delimiter=',')
+        join = pd.merge(d1, d2, on='구별')
+        join.to_csv(self.dfg.context+'new_data/join_crime_cctv_model.csv')
+        print(join)
 
 
     def create_population_model(self):
