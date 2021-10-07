@@ -11,7 +11,7 @@ from icecream import ic
 
 
 @dataclass
-class DFrameGenerator(object):
+class ValueObject(object):
 
     context: str
     train: object
@@ -131,4 +131,4 @@ class Printer(PrinterBase):
         ic(this.info())
         # ic(this.describe())
         # ic(this.columns())
-        ic(this.isnull().sum())
+        # ic(this.isnull().sum())

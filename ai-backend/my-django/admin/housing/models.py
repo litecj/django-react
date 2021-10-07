@@ -7,7 +7,7 @@ from django.db import models
 from icecream import ic
 from sklearn.model_selection import train_test_split, StratifiedShuffleSplit
 
-from admin.common.models import DFrameGenerator
+from admin.common.models import ValueObject
 
 
 class HousingService(object):
@@ -17,12 +17,12 @@ class HousingService(object):
     #     self.test_set = test_set
 
     def __init__(self): # HousingService 사용시 자동으로 데이터프레임 생성
-        self.dfg = DFrameGenerator()
-        self.dfg.fname = 'admin/housing/data/housing.csv'
-        self.model = self.dfg.create_model()
+        self.vo = ValueObject()
+        self.vo.fname = 'admin/housing/data/housing.csv'
+        self.model = self.vo.create_model()
 
     def housing_info(self):
-        self.dfg.model_info(self.model)
+        self.vo.model_info(self.model)
 
     # def new_model(self)-> object:  # "object"는 데이터프레임 / pd는 소문자지만 매서드  ↑ 'init'에서 'self.dfg.fname'과정으로 해결
     #     return pd.read_csv(self.dfg.fname)
@@ -40,9 +40,9 @@ class HousingService(object):
     def split_model(self)->[]:  # 그냥 임의로 값을 나눈 것 / train_test_split = 함수(앞이 소문자)
         train_set, test_set = train_test_split(self.model, test_size=0.2, random_state=42) # 'self.model'에서 42(난수 초기값)를 기준으로 20%
         print('*' * 100)
-        self.dfg.model_info(train_set)
+        self.vo.model_info(train_set)
         print('#' * 100)
-        self.dfg.model_info(test_set)
+        self.vo.model_info(test_set)
         return [train_set, test_set]
         # self.train_set, self.test_set = train_test_split(self.new_model(), test_size=0.2, random_state=42)
         # return train_test_split(self.new_model(), test_size=0.2, random_state=42)
