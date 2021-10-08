@@ -7,5 +7,6 @@ urlpatterns = {
     url(r'create-police-position', views.create_police_position),
     url(r'create-cctv-model', views.create_cctv_model),
     url(r'create-population-model', views.create_population_model),
-    url(r'jion-crime-cctv-model', views.jion_crime_cctv_model)
+    url(r'jion-crime-cctv-model', views.jion_crime_cctv_model),
+    url(r'jion-cctv-population-model', views.jion_cctv_population_model)
 }

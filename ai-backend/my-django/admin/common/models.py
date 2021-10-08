@@ -128,7 +128,7 @@ class Printer(PrinterBase):
     def dframe(self, this):
         ic(this.head(3))
         ic(this.tail(3))
-        ic(this.info())
+        print(this.info())
         ic(this.describe())
         # ic(this.columns())
-        # ic(this.isnull().sum())
+        print(f'!!Null Count is  {this.isnull().sum()}')
