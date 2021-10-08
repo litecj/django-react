@@ -114,6 +114,10 @@ class Reader(ReaderBase):
     def csv_header(self, file, header) -> object:
         return pd.read_csv(f'{file}.csv', encoding='UTF-8', thousands=',', header=header)
 
+    def csv_header_use(self, file, header, usecols) -> object:
+        return pd.read_csv(f'{file}.csv', encoding='UTF-8', thousands=',', header=header, usecols=usecols)
+
+
     def xls(self, file, header, usecols) -> object:
         return pd.read_excel(f'{file}.xls', header=header , usecols=usecols)
 

@@ -99,6 +99,47 @@ class CrimeCctvModel(object):
         # crime.to_csv(self.dfg.context+'new_data/police_position(1).csv')  # 주소(변형된, new-model) 한번 저장 후, 주석 처리
         return crime
 
+    def create_crime_sum(self):
+        # generator = self.dfg
+        # reader = self.dfr
+        # generator.context = 'admin/crime_seoul/data/new_data/'
+        # generator.fname = 'police_position'  # , 'population_in_Seoul.xls', 'CCTV_in_Seoul.csv'
+        # new_crime_file_name = reader.new_file(generator)
+        # crime_sum_1 = reader.csv_header_use(new_crime_file_name, 0, ['구별', '살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생'])
+        # crime_sum_2 = reader.csv_header_use(new_crime_file_name, 0, ['구별', '살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거'])
+        crime_sum = self.create_police_position()
+        cctv = self.create_cctv_model()
+        crime_sum_1 = crime_sum.loc[:, ['구별', '살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생']]
+        crime_sum_2 = crime_sum.loc[:, ['구별', '살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거']]
+        crime_sum_1['총 범죄 수'] = crime_sum_1.sum(axis=1)
+        crime_sum_1['총 검거 수'] = crime_sum_2.sum(axis=1)
+        # crime_sum_1['총 검거율'] = crime_sum_1['총 검거 수']/crime_sum_1['총 범죄 수'] * 100
+        crime_sum_3 = crime_sum_1.loc[:,['구별', '총 범죄 수', '총 검거 수']]
+        # last = join.loc[:, ['구별', '소계', '총 범죄 수', '총 검거 수', '총 검거율']]
+        # last = join.groupby('구별', as_index=False).mean()
+        last = crime_sum_3.groupby('구별').sum()
+        last['총 검거율'] = last['총 검거 수']/last['총 범죄 수'] * 100
+        last1 = cctv.loc[:, ['구별', '소계']]
+        join = pd.merge(last1, last, on='구별')
+        # print(crime_sum_1)
+        join.to_csv('admin/crime_seoul/data/new_data/crime_sum(test_4).csv')
+        # print(f'!!!!!!!!!!!!!!!!!!test!!!!!!!!!!!!!!!!!!!!!{last1}')
+        print('*'*100)
+        print(join)
+        print('*' * 100)
+        # ic(last.corr())
+
+        '''
+                 총 검거 수   총 범죄 수  총 검거율    소계
+        총 검거 수  1.000000  0.980313 -0.120028 -0.155695
+        총 범죄 수  0.980313  1.000000 -0.306195 -0.178552
+        총 검거율  -0.120028 -0.306195  1.000000  0.100789
+        소계     -0.155695 -0.178552  0.100789  1.000000
+
+        '''
+
+
+
     def create_cctv_model(self):
         generator = self.dfg
         reader = self.dfr
@@ -136,8 +177,33 @@ class CrimeCctvModel(object):
         # d1 = pd.read_csv('admin/crime_seoul/data/new_data/cctv_model.csv', delimiter=',')
         # d2 = pd.read_csv('admin/crime_seoul/data/new_data/population_model.csv', delimiter=',')
         merge = pd.merge(d1, d2, on='구별')
-        merge.to_csv(self.dfg.context+'new_data/jion_cctv_population_model.csv')
-        print(merge)
+        '''
+        r이 -1.0과 -0.7 사이이면, 강한 음적 선형관계, #
+        r이 -0.7과 -0.3 사이이면, 뚜렷한 음적 선형관계,
+        r이 -0.3과 -0.1 사이이면, 약한 음적 선형관계,
+        r이 -0.1과 +0.1 사이이면, 거의 무시될 수 있는 선형관계,
+        r이 +0.1과 +0.3 사이이면, 약한 양적 선형관계,
+        r이 +0.3과 +0.7 사이이면, 뚜렷한 양적 선형관계,
+        r이 +0.7과 +1.0 사이이면, 강한 양적 선형관계
+        '''
+        ic(merge.corr())
+        '''
+        ic| merge.corr():                인구수   한국인    외국인      고령자     CCTV 소계  2013년도이전  2014년     2015년     2016년
+                          인구수        1.000000  0.998061 -0.153371  0.932667  [0.306342]   0.168177  0.027040  0.368912  0.144959
+                          한국인        0.998061  1.000000 -0.214576  0.931636  [0.304287]   0.163142  0.025005  0.363796  0.145966
+                          외국인       -0.153371 -0.214576  1.000000 -0.155381 [-0.023786]   0.048973  0.027325  0.013301 -0.042688
+                          고령자        0.932667  0.931636 -0.155381  1.000000  [0.255196]   0.105379  0.010233  0.372789  0.065784
+                          소계         0.306342  0.304287 -0.023786  0.255196   1.000000   0.862756  0.450062  0.624402  0.593398
+                          2013년도 이전  0.168177  0.163142  0.048973  0.105379  0.862756   1.000000  0.121888  0.257748  0.355482
+                          2014년      0.027040  0.025005  0.027325  0.010233  0.450062   0.121888  1.000000  0.312842  0.415387
+                          2015년      0.368912  0.363796  0.013301  0.372789  0.624402   0.257748  0.312842  1.000000  0.513767
+                          2016년      0.144959  0.145966 -0.042688  0.065784  0.593398   0.355482  0.415387  0.513767  1.000000
+                          
+                          # cctv의 총 갯수를 기준으로 인구수와의 관계 확인
+                          # → 과거, 인구 수에 대비하여 CCTV 배분 / 한국인의 수와 연관관계 있지만, 외국인과의 관계 없음.
+        '''
+        # merge.to_csv(self.dfg.context+'new_data/jion_cctv_population_model.csv')
+        # print(merge)
 
     def create_population_model(self) -> object:
         generator = self.dfg

@@ -41,3 +41,7 @@ def jion_crime_cctv_model(request):
 def jion_cctv_population_model(request):
     CrimeCctvModel().jion_cctv_population_model()
     return JsonResponse({'result': 'Jion Cctv Population Model SUCCESS'})
+
+def create_crime_sum(request):
+    CrimeCctvModel().create_crime_sum()
+    return JsonResponse({'result': 'Create Crime Sum Model SUCCESS'})
