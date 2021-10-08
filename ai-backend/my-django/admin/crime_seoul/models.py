@@ -1,3 +1,5 @@
+import re
+
 import pandas as pd
 # from django.db import models
 
@@ -20,8 +22,8 @@ class CrimeCctvModel(object):
         Raw Data's features
         살인 발생,살인 검거,강도 발생,강도 검거,강간 발생,강간 검거,절도 발생,절도 검거,폭력 발생,폭력 검거
         '''
-        self.crime_columns = ['살인발생', '강도발생', '강간발생', '절도발생', '폭력발생']  # Nominal
-        self.arrest_columns = ['살인검거', '강도검거', '강간검거', '절도검거', '폭력검거']  # Nominal
+        self.crime_columns = ['살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생']  # Nominal
+        self.arrest_columns = ['살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거']  # Nominal
         self.arrest_rate_columns = ['살인검거율', '강도검거율', '강간검거율', '절도검거율', '폭력검거율']  # Ratio
         self.cctv_columns = ['기관명', '소계', '2013년도이전', '2014년', '2015년', '2016년']
 
@@ -100,34 +102,47 @@ class CrimeCctvModel(object):
         return crime
 
     def create_crime_sum(self):
-        # generator = self.dfg
-        # reader = self.dfr
-        # generator.context = 'admin/crime_seoul/data/new_data/'
-        # generator.fname = 'police_position'  # , 'population_in_Seoul.xls', 'CCTV_in_Seoul.csv'
-        # new_crime_file_name = reader.new_file(generator)
-        # crime_sum_1 = reader.csv_header_use(new_crime_file_name, 0, ['구별', '살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생'])
-        # crime_sum_2 = reader.csv_header_use(new_crime_file_name, 0, ['구별', '살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거'])
         crime_sum = self.create_police_position()
         cctv = self.create_cctv_model()
-        crime_sum_1 = crime_sum.loc[:, ['구별', '살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생']]
-        crime_sum_2 = crime_sum.loc[:, ['구별', '살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거']]
-        crime_sum_1['총 범죄 수'] = crime_sum_1.sum(axis=1)
-        crime_sum_1['총 검거 수'] = crime_sum_2.sum(axis=1)
-        # crime_sum_1['총 검거율'] = crime_sum_1['총 검거 수']/crime_sum_1['총 범죄 수'] * 100
-        crime_sum_3 = crime_sum_1.loc[:,['구별', '총 범죄 수', '총 검거 수']]
-        # last = join.loc[:, ['구별', '소계', '총 범죄 수', '총 검거 수', '총 검거율']]
-        # last = join.groupby('구별', as_index=False).mean()
-        last = crime_sum_3.groupby('구별').sum()
-        last['총 검거율'] = last['총 검거 수']/last['총 범죄 수'] * 100
-        last1 = cctv.loc[:, ['구별', '소계']]
-        join = pd.merge(last1, last, on='구별')
-        # print(crime_sum_1)
-        join.to_csv('admin/crime_seoul/data/new_data/crime_sum(test_4).csv')
-        # print(f'!!!!!!!!!!!!!!!!!!test!!!!!!!!!!!!!!!!!!!!!{last1}')
-        print('*'*100)
+        crime_sum_1 = crime_sum.loc[:, ['구별']]
+        crime_sum_1['총 범죄 수'] = crime_sum.loc[:, self.crime_columns].sum(axis=1)
+        crime_sum_1['총 검거 수'] = crime_sum.loc[:, self.arrest_columns].sum(axis=1)
+        crime_sum_2 = crime_sum_1.groupby('구별').sum()
+        crime_sum_2['총 검거율'] = crime_sum_2['총 검거 수'] / crime_sum_2['총 범죄 수'] * 100
+        join = pd.merge(cctv.loc[:, ['구별', '소계']], crime_sum_2, on='구별')
+        print('*' * 100)
         print(join)
         print('*' * 100)
-        # ic(last.corr())
+
+        # # generator = self.dfg
+        # # reader = self.dfr
+        # # generator.context = 'admin/crime_seoul/data/new_data/'
+        # # generator.fname = 'police_position'  # , 'population_in_Seoul.xls', 'CCTV_in_Seoul.csv'
+        # # new_crime_file_name = reader.new_file(generator)
+        # # crime_sum_1 = reader.csv_header_use(new_crime_file_name, 0, ['구별', '살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생'])
+        # # crime_sum_2 = reader.csv_header_use(new_crime_file_name, 0, ['구별', '살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거'])
+        # crime_sum = self.create_police_position()
+        # cctv = self.create_cctv_model()
+        # crime_sum_1 = crime_sum.loc[crime_sum.columns == re.compile('발생$')]
+        # # crime_sum_1 = crime_sum.loc[:, ['구별', '살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생']]
+        # crime_sum_2 = crime_sum.loc[:, ['구별', '살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거']]
+        # crime_sum_1['총 범죄 수'] = crime_sum_1.sum(axis=1)
+        # crime_sum_1['총 검거 수'] = crime_sum_2.sum(axis=1)
+        # # crime_sum_1['총 검거율'] = crime_sum_1['총 검거 수']/crime_sum_1['총 범죄 수'] * 100
+        # crime_sum_3 = crime_sum_1.loc[:,['구별', '총 범죄 수', '총 검거 수']]
+        # # last = join.loc[:, ['구별', '소계', '총 범죄 수', '총 검거 수', '총 검거율']]
+        # # last = join.groupby('구별', as_index=False).mean()
+        # last = crime_sum_3.groupby('구별').sum()
+        # last['총 검거율'] = last['총 검거 수']/last['총 범죄 수'] * 100
+        # last1 = cctv.loc[:, ['구별', '소계']]
+        # join = pd.merge(last1, last, on='구별')
+        # # print(crime_sum_1)
+        # join.to_csv('admin/crime_seoul/data/new_data/crime_sum(test_5).csv')
+        # # print(f'!!!!!!!!!!!!!!!!!!test!!!!!!!!!!!!!!!!!!!!!{last1}')
+        # print('*'*100)
+        # print(join)
+        # print('*' * 100)
+        # # ic(last.corr())
 
         '''
                  총 검거 수   총 범죄 수  총 검거율    소계
@@ -222,6 +237,7 @@ class CrimeCctvModel(object):
         #                                  '등록외국인': '외국인',
         #                                  '65세이상고령자': '고령자'},
         #                         inplace=True)
+        # population_model.rename(columns={population_model.columns[i]: list[i] for i in range(len(list))}, inplace=True)  # for문으로 순서 대로 일부 변경
         population_model.rename(columns={population_model.columns[0]: '구별',  # index로 변경하기
                                          population_model.columns[1]: '인구수',
                                          population_model.columns[2]: '한국인',
