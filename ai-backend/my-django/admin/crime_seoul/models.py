@@ -98,7 +98,7 @@ class CrimeCctvModel(object):
         print(f"샘플 정보 확인 : {crime[crime['관서명'] == '혜화서']}")
         print(f"샘플 정보 확인 : {crime[crime['관서명'] == '금천서']}")
         # crime, loc, crime['관서명'] : dataframe
-        # crime.to_csv(self.dfg.context+'new_data/police_position(1).csv')  # 주소(변형된, new-model) 한번 저장 후, 주석 처리
+        crime.to_csv(self.dfg.context+'new_data/police_position(2).csv', index=False)  # 주소(변형된, new-model) 한번 저장 후, 주석 처리
         return crime
 
     def create_crime_sum(self):
@@ -122,22 +122,40 @@ class CrimeCctvModel(object):
         # print(join)
         # print('*' * 100)
 
-        crime = self.dfr.csv('admin/crime_seoul/data/new_data/police_position').groupby('구별').sum()
-        # cctv = self.dfr.csv('admin/crime_seoul/data/new_data/cctv_model')
-        # crime_sum_1 = crime.groupby('구별').sum()
-        # crime_sum = {}
-        crime_sum_1 = crime.loc[crime.columns != re.compile(' 검거$')]
-        print(crime_sum_1)
-        # crime_sum_2 = crime.loc[:, [crime.columns != re.compile('범죄$')]]
-        # crime_sum['총 범죄 수'] = crime_sum_1.sum(axis=1)
-        # crime_sum['총 검거 수'] = crime_sum_2.sum(axis=1)
-        #
-        # print(crime_sum)
-        # crime_sum['구별'] = crime.loc[:, ['구별']]
-        # join = pd.merge(cctv.loc[:, ['구별', '소계']], crime_sum, on='구별')
-        # print('*' * 100)
-        # print(join)
-        # print('*' * 100)
+
+        # crime = self.dfr.csv('admin/crime_seoul/data/new_data/police_position').groupby('구별').sum()
+        # # cctv = self.dfr.csv('admin/crime_seoul/data/new_data/cctv_model')
+        # # crime_sum_1 = crime.groupby('구별').sum()
+        # # crime_sum = {}
+        # crime_sum_1 = crime.loc[crime.columns != re.compile(' 검거$')]
+        # print(crime_sum_1)
+        # # crime_sum_2 = crime.loc[:, [crime.columns != re.compile('범죄$')]]
+        # # crime_sum['총 범죄 수'] = crime_sum_1.sum(axis=1)
+        # # crime_sum['총 검거 수'] = crime_sum_2.sum(axis=1)
+        # #
+        # # print(crime_sum)
+        # # crime_sum['구별'] = crime.loc[:, ['구별']]
+        # # join = pd.merge(cctv.loc[:, ['구별', '소계']], crime_sum, on='구별')
+        # # print('*' * 100)
+        # # print(join)
+        # # print('*' * 100)
+
+        crime = pd.read_csv('admin/crime_seoul/data/new_data/police_position(2).csv').groupby('구별').sum()
+        cctv = pd.read_csv('admin/crime_seoul/data/new_data/cctv_model.csv')
+        # p = crime.columns
+        # print(crime)
+        # c = crime.loc[:, ['Unnamed: 0']]
+        # a = re.compile(' 발생$')
+        # c = p.str.contains(' 검거$', case=False, regex=True)
+        # a = p.str.contains(' 발생$', case=False, regex=True)
+        # c = crime[2].str.contains('구', case=False, regex=True)
+        crime['총 범죄 수'] = crime.loc[:, crime.columns.str.contains(' 발생$', case=False, regex=True)].sum(axis=1)
+        crime['총 검거 수'] = crime.loc[:, crime.columns.str.contains(' 검거$', case=False, regex=True)].sum(axis=1)
+        # crime['총 검거 수'] = crime.loc[:, c].sum(axis=1)
+        crime['총 검거율'] = crime['총 검거 수'] / crime['총 범죄 수'] * 100
+        print(crime)
+        join = pd.merge(cctv.loc[:, ['구별', '소계']], crime.loc[:, '총 범죄 수':'총 검거율'], on='구별')
+        print(join)
 
         # # generator = self.dfg
         # # reader = self.dfr
