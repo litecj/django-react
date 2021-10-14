@@ -9,5 +9,11 @@ urlpatterns = {
     url(r'create-population-model', views.create_population_model),
     url(r'jion-crime-cctv-model', views.jion_crime_cctv_model),
     url(r'jion-cctv-population-model', views.jion_cctv_population_model),
-    url(r'create-crime-sum', views.create_crime_sum)
+    url(r'create-crime-sum', views.create_crime_sum),
+    url(r'sum-population-model', views.sum_population_model),
+
+
+
+
+    url(r'process', views.process)
 }

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 # pip install Django django-rest-framework
-from .models import CrimeCctvModel as crime_seoul
+from .models_old import CrimeCctvModel as crime_seoul
 
 # class CrimeSeoulSerializer(serializers.Serializer):
 #

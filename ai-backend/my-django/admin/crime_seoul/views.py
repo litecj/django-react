@@ -6,16 +6,17 @@ from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
 
 from admin.crime_seoul.models import CrimeCctvModel
+from admin.crime_seoul.models_old import CrimeCctvModelOld
 
 
 @api_view(['GET'])
 @parser_classes([JSONParser])
 def create_crime_model(request):
-    CrimeCctvModel().create_crime_model()
+    CrimeCctvModelOld().create_crime_model()
     return JsonResponse({'result': 'Create Crime Model SUCCESS'})
 
 def crime_info(request):
-    CrimeCctvModel()
+    CrimeCctvModelOld()
     return JsonResponse({'result': 'Crime Info SUCCESS'})
 
 def crime_hist(request):
@@ -23,25 +24,33 @@ def crime_hist(request):
 
 
 def create_police_position(request):
-    CrimeCctvModel().create_police_position()
+    CrimeCctvModelOld().create_police_position()
     return JsonResponse({'result': 'Create Police Position SUCCESS'})
 
 def create_cctv_model(request):
-    CrimeCctvModel().create_cctv_model()
+    CrimeCctvModelOld().create_cctv_model()
     return JsonResponse({'result': 'Create Cctv Model SUCCESS'})
 
 def create_population_model(request):
-    CrimeCctvModel().create_population_model()
+    CrimeCctvModelOld().create_population_model()
     return JsonResponse({'result': 'Create Population Model SUCCESS'})
 
 def jion_crime_cctv_model(request):
-    CrimeCctvModel().jion_crime_cctv_model()
+    CrimeCctvModelOld().jion_crime_cctv_model()
     return JsonResponse({'result': 'Jion Crime Cctv Model SUCCESS'})
 
 def jion_cctv_population_model(request):
-    CrimeCctvModel().jion_cctv_population_model()
+    CrimeCctvModelOld().jion_cctv_population_model()
     return JsonResponse({'result': 'Jion Cctv Population Model SUCCESS'})
 
 def create_crime_sum(request):
-    CrimeCctvModel().create_crime_sum()
+    CrimeCctvModelOld().create_crime_sum()
     return JsonResponse({'result': 'Create Crime Sum Model SUCCESS'})
+
+def sum_population_model(request):
+    CrimeCctvModelOld().sum_population_model()
+    return JsonResponse({'result': 'Sum Population Model SUCCESS'})
+
+def process(request):
+    CrimeCctvModel().process()
+    return JsonResponse({'result': 'Process SUCCESS'})
