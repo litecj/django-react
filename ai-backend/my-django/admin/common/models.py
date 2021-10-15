@@ -122,8 +122,8 @@ class Reader(ReaderBase):
         return pd.read_excel(f'{file}.xls', header=header , usecols=usecols)
 
     def json(self, file):
-        return pd.read_json(f'{file}.json', encoding='UTF-8')
-        # return json.load(open(f'{file}.json', encoding='UTF-8'))
+        # return pd.read_json(f'{file}.json', encoding='UTF-8')
+        return json.load(open(f'{file}.json', encoding='UTF-8'))
 
     def gmaps(self) -> object:
         return googlemaps.Client(key='')
