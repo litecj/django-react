@@ -67,7 +67,7 @@ class Crawling(object):
         start_date = dt.date(year=2018, month=12, day=1)
         until_date = dt.date(year=2018, month=12, day=2)  # 시작날짜 +1
         end_date = dt.date(year=2018, month=12, day=2)
-        query = 'obama'
+        query = 'Obama'
         total_tweets = []
         url = f'https://twitter.com/search?q={query}%20' \
               f'since%3A{str(start_date)}%20until%3A{str(until_date)}&amp;amp;amp;amp;amp;amp;lang=eg'
@@ -78,27 +78,36 @@ class Crawling(object):
             while True:
                 daily_freq = {'Date': start_date}
                 word_freq = 0
-                tweets = soup.find_all('p', {'class': 'TweetTextSize'})
+                tweets = soup.find_all('p', {'class': 'TweetWextSize'})
                 driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
                 new_height = driver.execute_script('return document.body.scrollHeight')
                 if new_height != last_height:
                     soup = BeautifulSoup(driver.page_source, 'html.parser')
-                    tweets = soup.find_all('p', {'class', 'TweetTextSize'})
+                    tweets = soup.find_all('span', {'class', 'css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0'})
+                    print('------ 1 ----')
+                    print(tweets)
                     word_freq = len(tweets)
                 else:
                     daily_freq['Frequency'] = word_freq
                     word_freq = 0
                     start_date = until_date
-                    until_date = dt.timedelta(days=1)
+                    until_date += dt.timedelta(days=1)
                     daily_freq = {}
                     total_tweets.append(tweets)
+                    print('------- 2 ---')
+                    all_div = soup.find_all('div', {'class', 'css-901oao'})
+                    arr = [span.string for span in all_div]
+                    for i in arr:
+                        print(i)
                     break
                 last_height = new_height
-        obama_df = pd.DataFrame(columns=['id', 'message'])
+        '''
+        trump_df = pd.DataFrame(columns=['id', 'message'])
         number = 1
         for i in range(len(total_tweets)):
             for j in range(len(total_tweets[i])):
-                obama_df = obama_df.append({'id': number, 'message': (total_tweets[i][j]).text},
+                trump_df = trump_df.append({'id': number, 'message': (total_tweets[i][j]).text},
                                            ignore_index=True)
                 number = number + 1
-        print(obama_df.head())
+        print(trump_df.head())
+        '''
