@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'admin.housing',
     'admin.crime_seoul',
     'admin.crawling',
+    'admin.tensor',
     'rest_framework',
     'corsheaders',
     'django.contrib.admin',

@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/users/', include('admin.user.urls')),
     path('api/crime/', include('admin.crime_seoul.urls')),
     path('api/crawling/', include('admin.crawling.urls')),
+    path('api/tensor/', include('admin.tensor.urls')),
 ]
 #
 # urlpatterns = [

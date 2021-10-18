@@ -77,6 +77,13 @@ class Crawling(object):
         '''
         tokens = word_tokenize(noun_tokens_join)
         # print(f':::::::: tokens ::::::::\n {tokens}')
+        '''
+            :::::::: tokens ::::::::
+             ['삼성전자', '가능보고서', '보고서', '개요', '전자', '사회환경', '가치창', '통합', '성과', '이해관계자', '소통', '매년', 
+             '가능보고서', '발간', '열한', '가능보고서', '발간', '보고기간', '보고서', '사회환경', '성과', '활동', '일부', '정성', 
+             '성과', '대해', '자료', '포함', '정량', '연도별', '추이', '분석', '최근', '개년', '수치', '제공', '보고범위', '보고범위', 
+             '국내', '해외', '사업', '공급망', '포함', '재무성', '연결기준', '작성', '사업', '환경', '정량', '국내외', '생산'
+        '''
         stopfile = f'{vo.context}stopwords.txt'
         with open(stopfile, 'r', encoding='utf-8') as f:
             stopwords = f.read()
@@ -84,6 +91,10 @@ class Crawling(object):
         stopwords.extend(['각주', '용량', '가능보고서', '고려', '전세계', '릴루미노', '가치창'])
         texts_without_stopwords = [text for text in tokens if text not in stopwords]
         # print(f':::::::: {datetime.now()} ::::::::\n {texts_without_stopwords[:10]}')
+        '''
+            :::::::: 2021-10-18 15:16:04.681365 ::::::::
+            ['사회환경', '열한', '사회환경', '연도별', '추이', '개년', '뉴스룸', '가능사무국', '수원시', '영통구']
+        '''
         freq_texts = pd.Series(dict(FreqDist(texts_without_stopwords))).sort_values(ascending=False)
         # print(f':::::::: {datetime.now()} ::::::::\n {freq_texts[:30]}')
         wcloud = WordCloud(f'{vo.context}D2Coding.ttf', relative_scaling=0.2, background_color='white').generate(' '.join(texts_without_stopwords))
