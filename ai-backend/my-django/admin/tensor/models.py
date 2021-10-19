@@ -13,18 +13,30 @@ class FashionClassification(object):
     def fashion(self): # 함수형
         fashion_mnist = keras.datasets.fashion_mnist
         (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+        # self.peek_datas(train_images, test_images, test_labels)
         model = keras.Sequential([
             keras.layers.Flatten(input_shape=[28, 28]),
-            keras.layers.Dense(400, activation="relu"),
-            keras.layers.Dense(200, activation="relu"),
-            keras.layers.Dense(200, activation="relu"),
-            keras.layers.Dense(10, activation="softmax")
+            keras.layers.Dense(400, activation="relu"),  # neron count 128
+            keras.layers.Dense(128, activation="relu"),
+            keras.layers.Dense(128, activation="relu"),
+            keras.layers.Dense(10, activation="softmax")  # 출력층 활성화함수는 softmax
         ])
-        model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        model.compile(optimizer='adam',
+                      loss='sparse_categorical_crossentropy',
+                      metrics=['accuracy'])
         model.fit(train_images, train_labels, epochs=5)
+
+        # 확인 및 테스트 완료 후, 프로그램 저장
+        model.save(f'{self.vo.context}my_keras_model.h5')
+        # 이후 사용을 위한, 프로그램 사용을 위한 호출
+        model = keras.models.load_model("my_keras_model.h5")
+
+
+        # 확인 및 테스트를 위한 절차
+        '''
         test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)  # verbose 는 학습하는 내부상황 보기 중 2번선택
         predictions = model.predict(test_images)
-        i = 13
+        i = 9
         print(f'모델이 예측한 값 {np.argmax(predictions[i])}')
         print(f'정답: {test_labels[i]}')
         print(f'테스트 정확도: {test_acc}')
@@ -36,17 +48,14 @@ class FashionClassification(object):
         plt.yticks([])
         plt.imshow(test_image, cmap=plt.cm.binary)
         test_pred = np.argmax(test_predictions)
-        print(f'{test_pred}')
-        print('#' * 100)
-        print(f'{test_label}')
 
         if test_pred == test_label:
             color = 'blue'
         else:
             color = 'red'
-        plt.xlabel('{} : {} %'.format(self.class_name[test_pred],
+        plt.xlabel('{} : {} %'.format(self.class_names[test_pred],
                                       100 * np.max(test_predictions),
-                                      self.class_name[test_label], color))
+                                      self.class_names[test_label], color))
         plt.subplot(1, 2, 2)
         plt.grid(False)
         plt.xticks([])
@@ -56,7 +65,8 @@ class FashionClassification(object):
         test_pred = np.argmax(test_predictions)
         this_plot[test_pred].set_color('red')
         this_plot[test_label].set_color('blue')
-        plt.savefig(f'{self.vo.context}fashion_answer(13).png')
+        plt.savefig(f'{self.vo.context}fashion_answer(9).png')
+        '''
 
     def __init__(self):
         self.vo = ValueObject()
