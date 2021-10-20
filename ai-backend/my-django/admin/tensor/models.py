@@ -8,6 +8,119 @@ from tensorflow import keras
 from admin.common.models import ValueObject
 
 
+class TensorFunction(object):  # python: 객체는 빈통, 객체 안에 데이터를 넣으면 모델 / Java : 인스턴스는 빈통
+    def __init__(self):
+        self.vo = ValueObject()
+        self.vo.context = 'admin/tensor/data/'
+
+    def hook(self):
+        menu = 'create_model_summary'
+        if menu == 'tf_function' :
+            result = self.tf_function()
+
+        elif menu == 'tf_sum':
+            result = self.decorator_example()
+
+        elif menu == 'tf_add':
+            result = self.tf_add()
+
+        elif menu == 'tf_multiply':
+            result = self.gugu2(2)
+
+        elif menu == 'create_model':
+            result = self.create_model()
+
+        elif menu == 'create_model_summary':
+            result = self.create_model().summary()
+
+        else:
+            result = '해당사항 없음'
+
+        print(f'결과 : {result}')
+
+
+        # self.tf_function()
+        # self.gugu2(2)
+        # print(f'self.gugu2(2) : {self.gugu2(2)}')
+        # print(self.gugu2(2))
+        # print(f'결과 : {self.decorator_example()}')
+        # print(self.decorator_example())
+        # self.decorator_example()
+
+    # 구구단
+    @tf.function
+    def gugu2(self, dan):
+        for i in range(1, 10):
+            result = tf.multiply(dan, i)
+            # print(result.numpy()) # AttributeError: 'Tensor' object has no attribute 'numpy'
+            print(result)
+        return result
+
+    def tf_add(self):
+        x = [1, 2, 3, 4, 5]
+        y = 2 # 하나의 경우는 모든 요소의 값에 연결 됨
+        # y =[2, 3] # 양 값의 방향이 맞지 않으면 안됨 -> 같은 인덱스 끼리만 하기 때문이다.
+        y = [4, 5, 6, 7, 8] # 양 방향의 값이 같으면 계산이 가능하다.
+        z = tf.add(x, y)
+        z = tf.multiply(x, y)
+        z = tf.subtract(x, y)
+        z = tf.divide(x, y)
+        return z
+
+    def make_random_data(self):
+        x = np.random.uniform()
+
+    def create_model(self)-> object:
+        input = tf.keras.Input(shape=(1,))
+        output = tf.keras.layers.Dense(1)(input)
+        model = tf.keras.Model(input, output)
+        return model
+
+    '''
+        Model: "model" = tensorflow  의 구조조
+       _________________________________________________________________
+        Layer (type)                 Output Shape              Param #
+        =================================================================
+        input_1 (InputLayer)         [(None, 1)]               0
+        _________________________________________________________________
+        dense (Dense)                (None, 1)                 2
+        =================================================================
+        Total params: 2
+        Trainable params: 2
+        Non-trainable params: 0
+        _________________________________________________________________
+        결과 : None
+    '''
+
+    @tf.function  # tensorflow's function : 본질의 변화는 없으나, 데코레이터 된거임
+    def decorator_example(self):
+        a = tf.constant(1, tf.float32)  # tensorflow 의 변수는 내장 된 것만 가능. 외부에서 받는 건 모두 상수 이다
+        b = tf.constant(2, tf.float32)
+        c = tf.constant(3, tf.float32)
+        z = a + b + c
+        print(f'@tf.function 사용하기 z : {z}')
+        # z1 = tf.add(a, b, c)
+        print(f'a : {a}, b : {b}, c: {c}')
+        # print(f'@tf.function 사용하기 z1 : {z1}')
+        return z
+
+    # Not tensorflow's function
+    def tf_function(self):
+        mnist = tf.keras.datasets.mnist
+        (X_train, y_train), (X_test, y_test) = mnist.load_data()
+        X_train, X_test = X_train / 255.0, X_test /255.0
+        X_train = X_train[..., tf.newaxis]  # [행 , 열]  # 행의 추가 = 차원 추가
+        X_test = X_test[..., tf.newaxis]
+        train_ds = tf.data.Dataset.from_tensor_slices((X_train, y_train)).shuffle(10000).batch(32)
+        test_ds =  tf.data.Dataset.from_tensor_slices((X_test, y_test)).batch(32)
+
+        # print(f'train_ds : {type(train_ds)}')
+        '''
+        train_ds : <class 'tensorflow.python.data.ops.dataset_ops.BatchDataset'>
+        '''
+        # print(list(train_ds.as_numpy_iterator())) # 너무 길게 나옴
+        return train_ds.as_numpy_iterator()
+
 class FashionClassification(object):
 
     def fashion(self): # 함수형

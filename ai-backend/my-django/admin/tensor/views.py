@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
 
-from admin.tensor.models import Calculator, FashionClassification
+from admin.tensor.models import Calculator, FashionClassification, TensorFunction
 
 
 @api_view(['GET'])
@@ -27,3 +27,10 @@ def fashionClassification(request):
 def fashionClassification_Fashion(request):
     FashionClassification().fashion()
     return JsonResponse({'result': ' FashionClassification Fashion SUCCESS'})
+
+
+@api_view(['GET'])
+@parser_classes([JSONParser])
+def tensorFunction(request):
+    TensorFunction().hook()
+    return JsonResponse({'result': ' TensorFunction Tf_Function SUCCESS'})

@@ -6,5 +6,6 @@ urlpatterns = {
     url(r'calculator', views.calculator),
     url(r'fashion/process', views.fashionClassification),
     url(r'fashion', views.fashionClassification_Fashion),
+    url(r'tf_function', views.tensorFunction),
 
 }
