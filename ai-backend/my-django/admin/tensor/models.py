@@ -9,12 +9,37 @@ from admin.common.models import ValueObject
 
 
 class TensorFunction(object):  # python: 객체는 빈통, 객체 안에 데이터를 넣으면 모델 / Java : 인스턴스는 빈통
+
+    '''
+       model = Sequential()    # sequntial 모델 생성 할당 첫번째 층을
+       model.add(Dense(32, input_shape=(16, ))) # 첫번째 층을 dense 32 크기 out
+       model.add(Dense(32))
+       Arguments:
+       units: 현재 dense 를 통해서 만들 hidden layer 의 Node 의 수
+       첫번째 인자 : 출력 뉴런의 수를 설정합니다.
+       input_dim : 입력 뉴런의 수를 설정합니다.
+       init : 가중치 초기화 방법 설정합니다.
+       uniform : 균일 분포
+       normal : 가우시안 분포
+       activation : 활성화 함수 설정합니다.
+       linear : 디폴트 값, 입력뉴런과 가중치로 계산된 결과값이 그대로 출력으로 나옵니다.
+       relu : rectifier 함수, 은익층에 주로 쓰입니다.
+       sigmoid : 시그모이드 함수, 이진 분류 문제에서 출력층에 주로 쓰입니다. -> 출력 값이 한 가지
+       softmax : 소프트맥스 함수, 다중 클래스 분류 문제에서 출력층에 주로 쓰입니다.
+       다중클래스 분류문제에서는 클래스 수만큼 출력 뉴런이 필요합니다.
+       만약 세가지 종류로 분류한다면, 아래 코드처럼 출력 뉴런이 3개이고, -> 출력 값이 여러 개
+       입력 뉴런과 가중치를 계산한 값을 각 클래스의 확률 개념으로 표현할 수 있는
+       활성화 함수인 softmax를 사용합니다.
+
+       https://talkingaboutme.tistory.com/entry/DL-%ED%95%B4%EB%B3%B4%EB%A9%B4%EC%84%9C-%EB%B0%B0%EC%9A%B0%EB%8A%94-%EB%94%A5%EB%9F%AC%EB%8B%9D-ANN-%EA%B5%AC%ED%98%84-2
+    '''
+
     def __init__(self):
         self.vo = ValueObject()
         self.vo.context = 'admin/tensor/data/'
 
     def hook(self):
-        menu = 'create_model_summary'
+        menu = 'train_tf_model_by_random_data'
         if menu == 'tf_function' :
             result = self.tf_function()
 
@@ -32,6 +57,12 @@ class TensorFunction(object):  # python: 객체는 빈통, 객체 안에 데이�
 
         elif menu == 'create_model_summary':
             result = self.create_model().summary()
+
+        elif menu == 'create_tf_empty_model':
+            result = self.create_tf_empty_model()
+
+        elif menu == 'train_tf_model_by_random_data':
+            result = self.train_tf_model_by_random_data()
 
         else:
             result = '해당사항 없음'
@@ -67,14 +98,90 @@ class TensorFunction(object):  # python: 객체는 빈통, 객체 안에 데이�
         z = tf.divide(x, y)
         return z
 
+    def train_tf_model_by_random_data(self):
+        (x, y) = self.make_random_data()
+        x_train, y_train = x[:150], y[:150]
+        # x_test, y_test = x[:150], y[:150]
+
+        model = keras.models.load_model(f"{self.vo.context}simple_model(2).h5")
+        history = model.fit(x_train, y_train, epochs=30, validation_split=0.3) # validation_split : test 자체적 해결
+        epochs = np.arange(1, 30+1)
+        plt.plot(epochs, history.history['loss'], label='Training Loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.legend()
+        plt.savefig(f'{self.vo.context}train_tf_model_by_random_data.png')
+
+
+    def create_tf_empty_model(self):
+        '''model = keras.models.Sequential([
+            keras.layers.Flatten(input_shape=[1, 150]),
+            keras.layers.Dropout(rate=0.2),
+            keras.layers.Dense(1, activation="relu", kernel_initializer="he_normal"),
+            keras.layers.Dropout(rate=0.2),
+            keras.layers.Dense(1, activation="softmax")
+        ])'''
+
+        model = keras.models.Sequential()
+        model.add(keras.layers.Dense(units=1, activation="relu", kernel_initializer="he_normal",  input_dim=1))
+        model.add(keras.layers.Dropout(rate=0.2))
+        model.add(keras.layers.Dense(units=1, activation="softmax"))
+
+
+        model.compile(optimizer='sgd', loss='mse', metrics=['accuracy'])
+        model.save(f'{self.vo.context}simple_model(2).h5')
+
+        return model
+
+    def create_tf_empty_model2(self):  # 틀을 잘 모를 때,  빈통 만들어서 아는 것만 담는 방식으로 해보자
+        model = keras.models.Sequential()
+        model.add(keras.layers.Dense(1, activation="relu", kernel_initializer="he_normal"))
+        model.add(keras.layers.Dropout(rate=0.2))
+        model.add(keras.layers.Dense(1, activation="softmax"))
+        model.compile(optimizer='sgd', loss='mse', metrics=['accuracy'])
+        model.save(f'{self.vo.context}simple_model(2).h5')
+
+        return model
+
+    '''
+        Model: "sequential"
+        _________________________________________________________________
+        Layer (type)                 Output Shape              Param #
+        =================================================================
+        flatten (Flatten)            (None, 22500)             0
+        _________________________________________________________________
+        dropout (Dropout)            (None, 22500)             0
+        _________________________________________________________________
+        dense (Dense)                (None, 1)                 22501
+        _________________________________________________________________
+        dropout_1 (Dropout)          (None, 1)                 0
+        _________________________________________________________________
+        dense_1 (Dense)              (None, 1)                 2
+        =================================================================
+        Total params: 22,503
+        Trainable params: 22,503
+        Non-trainable params: 0
+        _________________________________________________________________
+        결과 : None
+    
+    '''
+
+
+
     def make_random_data(self):
-        x = np.random.uniform()
+        x = np.random.uniform(low= -2, high= 2, size= 200)
+        y = []
+        for t in x:
+            r = np.random.normal(loc=0.0, scale=(0.5 + t*t/3), size=None)
+            y.append(r)
+        return x, 1.726*x - 0.84 + np.array(y)
 
     def create_model(self)-> object:
         input = tf.keras.Input(shape=(1,))
         output = tf.keras.layers.Dense(1)(input)
         model = tf.keras.Model(input, output)
         return model
+
 
     '''
         Model: "model" = tensorflow  의 구조조
@@ -142,6 +249,7 @@ class FashionClassification(object):
         # 확인 및 테스트 완료 후, 프로그램 저장
         model.save(f'{self.vo.context}my_keras_model.h5')
         # 이후 사용을 위한, 프로그램 사용을 위한 호출
+
         model = keras.models.load_model("my_keras_model.h5")
 
 
