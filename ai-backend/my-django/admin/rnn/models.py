@@ -1,9 +1,24 @@
 from django.db import models
 import pandas as pd
+import pandas_datareader.data as web
 import os
+
+from fbprophet import Prophet
+from icecream import ic
 import matplotlib.pyplot as plt
 import mglearn
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
+
+import math
+import pandas_datareader as data_reader
+import numpy as np
+from tqdm import tqdm
+import numpy as np
+import tensorflow as tf
+from collections import deque
+import random
 
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
@@ -11,6 +26,30 @@ from sklearn.linear_model import LinearRegression
 # Create your models here.
 from admin.common.models import ValueObject, Reader
 
+############################################
+
+from datetime import datetime
+from pandas_datareader import data
+import yfinance as yf
+yf.pdr_override()
+path = "c:/Windows/Fonts/malgun.ttf"
+import platform
+from matplotlib import font_manager, rc
+if platform.system() == 'Darwin':
+    rc('font', family='AppleGothic')
+elif platform.system() == 'Windows':
+    font_name = font_manager.FontProperties(fname=path).get_name()
+    rc('font', family=font_name)
+else:
+    print('Unknown system... sorry~~~~')
+plt.rcParams['axes.unicode_minus'] = False
+'''
+시계열 데이터 
+: 일련의 순차적으로 정해진 데이터 셋의 집합
+: 시간에 관해 순서가 매겨져 있다는 점과, 연속한 관측치는 서로 상관관계를 갖고 있다
+회귀분석
+: 관찰된 연속형 변수들에 대해 두 변수 사이의 모형을 구한뒤 적합도를 측정해 내는 분석 방법
+'''
 
 class MyRNN(object):
 
@@ -18,6 +57,36 @@ class MyRNN(object):
         self.vo = ValueObject()
         self.reader = Reader()
         self.vo.context = 'admin/rnn/data/'
+
+
+    def ai_trader(self):
+        pass
+
+
+    def kia_predict(self):
+        start_date = '2018-1-4'
+        end_date = '2021-9-30'
+        KIA = data.get_data_yahoo('600519.SS', start_date, end_date)
+        print(KIA.head())
+        print(KIA.tail())
+        KIA['Close'].plot(figsize=(12, 6), grid=True)
+        KIA_trunc = KIA[:'2021-12-31']
+        df = pd.DataFrame({'ds':KIA_trunc.index, 'y':KIA_trunc['Close']})
+        df.reset_index(inplace=True)
+        del df['Date']
+        print(f'df.head(3) 데이터 : {df.head(3)}')
+        prophet = Prophet(daily_seasonality = True)
+        prophet.fit(df)
+        future = prophet.make_future_dataframe(periods=61)
+        print(f'future.tail(3) : {future.tail(3)}')
+        forecast = prophet.predict(future)
+        prophet.plot(forecast)
+        plt.figure(figsize=(12, 6))
+        plt.plot(KIA.index, KIA['Close'], label='real')
+        plt.plot(forecast['ds'], forecast['yhat'], label='forecase')
+        plt.grid()
+        plt.legend()
+        plt.savefig(f'{self.vo.context}test_data/MAO_close.png')
 
     def ram_price(self):
         ram_price = pd.read_csv(os.path.join(mglearn.datasets.DATA_PATH, "ram_price.csv"))
@@ -37,7 +106,7 @@ class MyRNN(object):
         pred_lr = lr.predict(x_all)
         price_lr = np.exp(pred_lr)  # log 값 되돌리기
 
-        #####
+        #####  내용 출력을 위한 부분  #####
         plt.semilogy(ram_price['date'], pred_tree,
                      label="TREE PREDIC", ls='-', dashes=(2, 1))
         plt.semilogy(ram_price['date'], pred_lr,

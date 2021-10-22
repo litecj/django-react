@@ -5,18 +5,18 @@ from rest_framework.parsers import JSONParser
 
 
 # Create your views here.
-from admin.rnn.models import MyRNN
+from admin.ai_trader.models import AITrader
 
 
 @api_view(['GET'])
 @parser_classes([JSONParser])
-def ram_price(request):
-    MyRNN().ram_price()
-    return JsonResponse({'MyRNN().ram_price()': 'SUCCESS'})
+def model_builder(request):
+    AITrader().model_builder()
+    return JsonResponse({'AITrader().model_builder()': 'SUCCESS'})
+
 
 @api_view(['GET'])
 @parser_classes([JSONParser])
-def kia_predict(request):
-    MyRNN().kia_predict()
-    return JsonResponse({'MyRNN().kia_predict()': 'SUCCESS'})
-
+def process(request):
+    AITrader().process()
+    return JsonResponse({'AITrader().process()': 'SUCCESS'})
