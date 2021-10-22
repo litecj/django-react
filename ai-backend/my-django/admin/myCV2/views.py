@@ -12,16 +12,28 @@ from admin.myCV2.models import MyCV2
 @parser_classes([JSONParser])
 def lena(request):
     MyCV2().lena()
-    return JsonResponse({'Iris Base': 'SUCCESS'})
+    return JsonResponse({'MyCV2().lena()': 'SUCCESS'})
 
 @api_view(['GET'])
 @parser_classes([JSONParser])
 def girl(request):
     MyCV2().girl()
-    return JsonResponse({'Iris Base': 'SUCCESS'})
+    return JsonResponse({'MyCV2().girl()': 'SUCCESS'})
 
 @api_view(['GET'])
 @parser_classes([JSONParser])
 def face_detect(request):
     MyCV2().face_detect()
-    return JsonResponse({'Iris Base': 'SUCCESS'})
+    return JsonResponse({'MyCV2().face_detect()': 'SUCCESS'})
+
+@api_view(['GET'])
+@parser_classes([JSONParser])
+def cat_mosaic(request):
+    MyCV2().cat_mosaic()
+    return JsonResponse({'MyCV2().cat_mosaic()': 'SUCCESS'})
+
+@api_view(['GET'])
+@parser_classes([JSONParser])
+def face_mosaic(request):
+    MyCV2().face_mosaic()
+    return JsonResponse({'MyCV2().face_mosaic()': 'SUCCESS'})

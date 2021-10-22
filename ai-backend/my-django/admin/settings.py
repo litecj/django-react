@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'admin.tensor',
     'admin.iris',
     'admin.myCV2',
+    'admin.rnn',
     'rest_framework',
     'corsheaders',
     'django.contrib.admin',
