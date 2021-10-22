@@ -13,12 +13,10 @@ from admin.common.models import ValueObject
 
 
 class AITrader(object):
-
     def __init__(self, action_space=3, model_name='AITrader'):
         self.vo = ValueObject()
         self.vo.context = 'admin/ai_trader/data/'
-
-        self.state_size = 10 # windows size
+        self.state_size = 10 # windwo_size
         self.action_space = action_space
         self.memory = deque(maxlen=2000)
         self.inventory = []
@@ -35,20 +33,14 @@ class AITrader(object):
 
     def model_builder(self):
         model = tf.keras.models.Sequential([
-            tf.keras.layers.Dense(units=32, activation="relu", input_dim=self.state_size),
-            # tf.keras.layers.Dropout(rate=0.2),
-            tf.keras.layers.Dense(units=64, activation="relu"),
-            # tf.keras.layers.Dropout(rate=0.2),
-            tf.keras.layers.Dense(units=128, activation="relu"),
-            # tf.keras.layers.Dropout(rate=0.2),
-            tf.keras.layers.Dense(units=self.action_space, activation="linear"),
-            # tf.keras.layers.Dropout(rate=0.2),
-            tf.keras.layers.Dense(1, activation="softmax")
+            tf.keras.layers.Dense(units=32, activation='relu', input_dim=self.state_size),
+            tf.keras.layers.Dense(units=64, activation='relu'),
+            tf.keras.layers.Dense(units=128, activation='relu'),
+            tf.keras.layers.Dense(units=self.action_space, activation='linear'),
+            tf.keras.layers.Dense(10, activation='softmax')
         ])
 
-        model.compile(loss='mse', optimizer = tf.keras.optimizers.Adam(lr=0.001))
-        # model.save(f'{self.vo.context}test_data/ai_trader.h5')
-
+        model.compile(loss='mse', optimizer=tf.keras.optimizers.Adam(lr=0.001))
         return model
 
         # model = tf.keras.models.Sequential()
@@ -78,14 +70,11 @@ class AITrader(object):
         batch = []
         for i in range(len(self.memory) - batch_size +1, len(self.memory)):
             batch.append(self.memory[i])
-
         for state, action, reward, next_state, done in batch:
-            print(f'################# batch_train 1 ################# {action}')
             reward = reward
             if not done:
                 reward = reward + self.gamma * np.amax(model.predict(next_state)[0])
             target = model.predict(state)
-            print(f'################# batch_train 1 action ################# {action}')
             target[0][action] = reward
             model.fit(state, target, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_final:
@@ -94,7 +83,8 @@ class AITrader(object):
 
 class Trading:
     def __init__(self):
-        pass
+        self.vo = ValueObject()
+        self.vo.context = 'admin/ai_trader/data/'
 
     def sigmoid(self, x):
         return 1 / (1 +math.exp(-x))
@@ -104,6 +94,7 @@ class Trading:
             return "- $ {0:2f}".format(abs(n))
         else:
             return "$ {0:2f}".format(abs(n))
+
 
     def dataset_loader(self, stock_name):
 
@@ -122,7 +113,7 @@ class Trading:
 
         state = []
         for i in range(window_size - 1):
-            state.append(self.sigmoid(windowed_data[i+1] - windowed_data[i]))
+            state.append(self.sigmoid((windowed_data[i+1] - windowed_data[i])))
         return np.array([state])
 
     def transaction(self, stock_name):
