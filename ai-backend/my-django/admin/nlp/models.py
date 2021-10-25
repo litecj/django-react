@@ -1,3 +1,4 @@
+from collections import defaultdict
 
 import tensorflow as tf
 from tensorflow import keras
@@ -85,6 +86,12 @@ class Imdb(object):
         num_classes = len(set(train_y))
         print('카테고리 : {}'.format(num_classes))
 
+        '''
+        훈련용 리뷰 개수 : 25000
+        테스트용 리뷰 개수 : 25000
+        카테고리 : 2
+        '''
+
         word_index = imdb.get_word_index()
         word_index = {k: (v + 3) for k, v in word_index.items()}
         word_index["<PAD>"] = 0
@@ -117,6 +124,10 @@ class Imdb(object):
         result = model.evaluate(test_X, test_y)
         print(f'result : {result}')
 
+        '''
+        result : [0.3362523913383484, 0.8712800145149231]
+        '''
+
         history_dict = history.history
         history_dict.keys()
         acc = history_dict['acc']
@@ -146,30 +157,43 @@ class Imdb(object):
         plt.savefig(f'{self.vo.context}show_npl.png')
 
 
+
+
 class NaverMovie(object):
     def __init__(self):
         self.vo = ValueObject()
         self.vo.context = 'admin/nlp/data/'
 
-    def naver_process(self):
+    def web_scraping(self):
         ctx = self.vo.context
         driver = webdriver.Chrome(f'{ctx}chromedriver')
         driver.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver')
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         all_divs = soup.find_all('div', attrs={'class', 'tit3'})
-        products = [div.a.string for div in all_divs]
+        # products = [[div.a.string for div in all_divs]]  #  list [] 타입 -> matrix [[]] 타입으로 변경  / csv 분석 : https://docs.python.org/ko/3/library/csv.html
+        '''
+        [['듄', '베놈 2: 렛 데어 비 카니지', '라스트 듀얼: 최후의 결투', '007 노 타임 투 다이', '노회찬6411', '이터널스', '고양이를 부탁해', '보이스', '휴가', '모가디슈', '기적', '십개월의 미래', '수색자', '아네트', '브라더', '당신얼굴 앞에
+        서', '코다', '강릉', '용과 주근깨 공주', '고장난 론', '할로윈 킬즈', '요시찰', '스틸워터', '극장판 짱구는 못말려: 격돌! 낙서왕국과 얼추 네 명의 용사들', '애프터: 관계의 함정', '인질', '화이트데이: 부서진 결계', '한창나이 선녀님', '
+        귀멸의 칼날: 남매의 연', '가을의 전설', '프리 가이', '동백', '경고', '샹치와 텐 링즈의 전설', '첫눈이 사라졌다', '스파이더맨: 노 웨이 홈', '장르만 로맨스', '당신은 믿지 않겠지만', '그래비티', '쁘띠 마망', '체리 향기', '타다: 대한민
+        국 스타트업의 초상', '푸른 호수', '올드', '밥정', '가족의 색깔', '그린 북', '킬링 카인드 ', '사상', '싱크홀']]
+        '''
 
+        # var 1
         # f = open(f'{ctx}naver_movie_dataset_0.csv', 'w', encoding='UTF-8', newline='')
         # for product in products:
         #     wr = csv.writer(f, delimiter=',')
         #     wr.writerow(product)
 
-        with open(f'{ctx}naver_movie_dataset_3.csv', 'w', encoding='UTF-8', newline='') as f:
-            for product in products:
-                wr = csv.writer(f, delimiter=',')
-                wr.writerow(product)  # writerows : 세로 정렬  # writerow : 가로 정렬
-                print(product)
+        # var 2
+        with open(f'{ctx}naver_movie_dataset_1.csv', 'w', encoding='UTF-8', newline='') as f:
+            # for product in products:  # 굳이 필요 하지 않음.
+            # wr = csv.writer(f, delimiter=',')  # csv 분석 : https://docs.python.org/ko/3/library/csv.html
+            wr = csv.writer(f)  # 한줄 프린트 필요
+            # wr.writerows(products)  # writerow : 1차원 list에 대한 row를 저장하는데 사용 # writerows : 2차원 list에 대한 row를 저장하는데 사용
+            wr.writerows([[div.a.string for div in all_divs]])
+            print([[div.a.string for div in all_divs]])
 
+        # var 3
         # for product in products:
         #     with open(f'{ctx}naver_movie_dataset_2.csv', 'w', encoding='UTF-8', newline='') as f:
         #         wr = csv.writer(f, delimiter=',')
@@ -177,4 +201,36 @@ class NaverMovie(object):
 
         driver.close()
 
+    def naver_process(self):
+        # self.web_scraping()
+        corpus = pd.read_table(f'{self.vo.context}naver_movie_dataset.csv', sep=',', encoding='UTF-8')
+        train_X = np.array(corpus)
+        # 카테고리 0 (긍정) 1 (부정)
+        n_class0 = len([1 for _, point in train_X if point > 3.5])
+        n_class1 = len([train_X]) - n_class0
+        counts = defaultdict(lambda : [0, 0])   # defaultdict : 팩토리 ->dict 생성  #  초기화 시킴
+        for doc, point in train_X:
+            if self.isNumber(doc) is False:
+                words = doc.split()
+                for word in words:
+                    counts[word][0 if point > 3.5 else 1] += 1
+        word_counts = counts
+        print(f'word_counts ::: {word_counts}')
+        '''
+        word_counts ::: defaultdict(<function NaverMovie.naver_process.<locals>.<lambda> at 0x000002C0ED2BD550>, {})
+        '''
+
+    def isNumber(self, doc):  # try : float 밖에 두어야 하는 이유?
+        try:
+            float(doc)
+            return True
+        except ValueError:
+            return False
+
+
+    def load_corpus(self, fname):
+        pass
+
+    def count_words(self, train_X):
+        pass
 
