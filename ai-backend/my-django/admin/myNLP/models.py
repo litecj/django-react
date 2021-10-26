@@ -26,6 +26,8 @@ class NaverMovie(object):
         print(f'결과 :::: {result}')
         result = n.classify('평범하다, 배우들 연기가 아쉽다')  # 0.6595745160614442
         print(f'결과 :::: {result}')
+        result = n.classify('지루했다')  # 0.01367458951253406
+        print(f'결과 :::: {result}')
         print('#'*100)
 
     def load_corpus(self):
