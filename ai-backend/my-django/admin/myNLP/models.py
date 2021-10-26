@@ -44,7 +44,6 @@ class NaverMovie(object):
                     counts[word][0 if point > 3.5 else 1] += 1
         return counts
 
-
     def isNumber(self, s):
         try:
             float(s)
@@ -52,13 +51,11 @@ class NaverMovie(object):
         except ValueError:
             return False
 
-
     def word_probabilities(self, counts, n_class0, n_class1, k):
         return [(w,
                  (class0 + k) / (n_class0 + 2 * k),
                  (class1 + k) / (n_class1 + 2 * k))
                 for w, (class0, class1) in counts.items()]
-
 
     def probability(self, word_probs, doc):
         docwords = doc.split()
@@ -73,7 +70,6 @@ class NaverMovie(object):
         prob_if_class0 = exp(log_prob_if_class0)
         prob_if_class1 = exp(log_prob_if_class1)
         return prob_if_class0 / (prob_if_class0 + prob_if_class1)
-
 
     def model_fit(self):
         train_X = self.load_corpus()
