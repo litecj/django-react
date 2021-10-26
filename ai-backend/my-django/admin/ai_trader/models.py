@@ -159,5 +159,5 @@ class Trading:
                 if len(trader.memory) > batch_size:
                     trader.batch_train(batch_size)
 
-                if episode % 100 == 0:
+                if episode % 5 == 0:
                     trader.model.save(f'{self.vo.context}ai_trader_{episode}.h5')

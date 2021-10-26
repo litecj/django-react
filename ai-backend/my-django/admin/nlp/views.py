@@ -18,4 +18,4 @@ def imdb_process(request):
 @parser_classes([JSONParser])
 def naver_process(request):
     NaverMovie().naver_process()
-    return JsonResponse({'NaverMovie().naver_process()': 'SUCCESS'})
+    return JsonResponse({'NaverMovie().model_fit()': 'SUCCESS'})

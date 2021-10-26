@@ -1,3 +1,4 @@
+import math
 from collections import defaultdict
 
 import tensorflow as tf
@@ -9,7 +10,6 @@ from time import sleep
 from bs4 import BeautifulSoup
 import pandas as pd
 import csv
-from admin.common.models import ValueObject
 
 # Create your models here.
 from admin.common.models import ValueObject
@@ -85,11 +85,45 @@ class Imdb(object):
         print('테스트용 리뷰 개수 : {}'.format(len(test_X)))
         num_classes = len(set(train_y))
         print('카테고리 : {}'.format(num_classes))
-
         '''
         훈련용 리뷰 개수 : 25000
         테스트용 리뷰 개수 : 25000
         카테고리 : 2
+        '''
+        print(train_X[0])
+        '''
+        [1, 14, 22, 16, 43, 530, 973, 1622, 1385, 65, 458, 4468, 66, 3941, 4, 173, 36, 256, 5, 25, 100, 43, 838, 112, 50, 670, 2, 9, 35, 480, 284, 5, 150, 4, 172, 112, 167, 2, 336, 385, 39, 4, 172, 4536, 1111, 17, 546, 38, 13, 447, 4, 192,
+        50, 16, 6, 147, 2025, 19, 14, 22, 4, 1920, 4613, 469, 4, 22, 71, 87, 12, 16, 43, 530, 38, 76, 15, 13, 1247, 4, 22, 17, 515, 17, 12, 16, 626, 18, 2, 5, 62, 386, 12, 8, 316, 8, 106, 5, 4, 2223, 5244, 16, 480, 66, 3785, 33, 4, 130, 12,
+         16, 38, 619, 5, 25, 124, 51, 36, 135, 48, 25, 1415, 33, 6, 22, 12, 215, 28, 77, 52, 5, 14, 407, 16, 82, 2, 8, 4, 107, 117, 5952, 15, 256, 4, 2, 7, 3766, 5, 723, 36, 71, 43, 530, 476, 26, 400, 317, 46, 7, 4, 2, 1029, 13, 104, 88, 4,
+         381, 15, 297, 98, 32, 2071, 56, 26, 141, 6, 194, 7486, 18, 4, 226, 22, 21, 134, 476, 26, 480, 5, 144, 30, 5535, 18, 51, 36, 28, 224, 92, 25, 104, 4, 226, 65, 16, 38, 1334, 88, 12, 16, 283, 5, 16, 4472, 113, 103, 32, 15, 16, 5345, 1
+        9, 178, 32]
+        '''
+        print(train_y[0])
+        '''
+        1
+        '''
+
+        len_result = [len(s) for s in train_X]
+
+        print('리뷰의 최대 길이 : {}'.format(np.max(len_result)))
+        print('리뷰의 평균 길이 : {}'.format(np.mean(len_result)))
+        '''
+        리뷰의 최대 길이 : 2494
+        리뷰의 평균 길이 : 238.71364
+        '''
+
+        plt.subplot(1, 2, 1)
+        plt.boxplot(len_result)
+        plt.subplot(1, 2, 2)
+        plt.hist(len_result, bins=50)
+        plt.savefig(f'{self.vo.context}test_data/show_training_review.png')
+
+        unique_elements, counts_elements = np.unique(train_y, return_counts=True)
+        print(f'각 레이블에 대한 빈도수: \n {np.asarray((unique_elements, counts_elements))}')
+        '''
+        각 레이블에 대한 빈도수:
+         [[    0     1]
+         [12500 12500]]
         '''
 
         word_index = imdb.get_word_index()
@@ -164,13 +198,36 @@ class NaverMovie(object):
         self.vo = ValueObject()
         self.vo.context = 'admin/nlp/data/'
 
+    def classify(self, doc):
+        return self.class0_probs(self.model_fit(), doc)
+
+    def naver_process(self):
+        self.model_fit()
+        self.classify('내 인생 최고의 영화')
+
+
+    def class0_probs(self, word_probs, doc):
+        docwords = doc.split()
+        log_prob_if_class0 = log_prob_if_class1 = 0.0
+        for word, log_prob_if_class0, log_prob_if_class1 in word_probs:
+            if word in docwords:
+                log_prob_if_class0 += math.log(log_prob_if_class0)
+                log_prob_if_class1 += math.log(log_prob_if_class1)
+            else:
+                log_prob_if_class0 += math.log(1.0 - log_prob_if_class0)
+                log_prob_if_class1 += math.log(1.0 - log_prob_if_class1)
+        prob_if_class0 = math.exp(log_prob_if_class0)
+        prob_if_class1 = math.exp(log_prob_if_class1)
+        return prob_if_class0 / (prob_if_class0 + prob_if_class1)
+
     def web_scraping(self):
         ctx = self.vo.context
         driver = webdriver.Chrome(f'{ctx}chromedriver')
-        driver.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver')
+        # driver.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver')
+        driver.get('https://movie.naver.com/movie/point/af/list.naver')
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         all_divs = soup.find_all('div', attrs={'class', 'tit3'})
-        # products = [[div.a.string for div in all_divs]]  #  list [] 타입 -> matrix [[]] 타입으로 변경  / csv 분석 : https://docs.python.org/ko/3/library/csv.html
+        products = [[div.a.string for div in all_divs]]  #  list [] 타입 -> matrix [[]] 타입으로 변경  / csv 분석 : https://docs.python.org/ko/3/library/csv.html
         '''
         [['듄', '베놈 2: 렛 데어 비 카니지', '라스트 듀얼: 최후의 결투', '007 노 타임 투 다이', '노회찬6411', '이터널스', '고양이를 부탁해', '보이스', '휴가', '모가디슈', '기적', '십개월의 미래', '수색자', '아네트', '브라더', '당신얼굴 앞에
         서', '코다', '강릉', '용과 주근깨 공주', '고장난 론', '할로윈 킬즈', '요시찰', '스틸워터', '극장판 짱구는 못말려: 격돌! 낙서왕국과 얼추 네 명의 용사들', '애프터: 관계의 함정', '인질', '화이트데이: 부서진 결계', '한창나이 선녀님', '
@@ -185,13 +242,13 @@ class NaverMovie(object):
         #     wr.writerow(product)
 
         # var 2
-        with open(f'{ctx}naver_movie_dataset_1.csv', 'w', encoding='UTF-8', newline='') as f:
-            # for product in products:  # 굳이 필요 하지 않음.
-            # wr = csv.writer(f, delimiter=',')  # csv 분석 : https://docs.python.org/ko/3/library/csv.html
-            wr = csv.writer(f)  # 한줄 프린트 필요
-            # wr.writerows(products)  # writerow : 1차원 list에 대한 row를 저장하는데 사용 # writerows : 2차원 list에 대한 row를 저장하는데 사용
-            wr.writerows([[div.a.string for div in all_divs]])
-            print([[div.a.string for div in all_divs]])
+        with open(f'{ctx}test_data/naver_movie_dataset_1.csv', 'w', encoding='UTF-8', newline='') as f:
+            for product in products:  # 굳이 필요 하지 않음.
+                # wr = csv.writer(f, delimiter=',')  # csv 분석 : https://docs.python.org/ko/3/library/csv.html
+                wr = csv.writer(f)  # 한줄 프린트 필요
+                wr.writerows(products)  # writerow : 1차원 list에 대한 row를 저장하는데 사용 # writerows : 2차원 list에 대한 row를 저장하는데 사용
+                # wr.writerows([[div.a.string for div in all_divs]])
+                print(products)
 
         # var 3
         # for product in products:
@@ -201,9 +258,11 @@ class NaverMovie(object):
 
         driver.close()
 
-    def naver_process(self):
+    # def naver_process(self):
+    def model_fit(self):
         # self.web_scraping()
-        corpus = pd.read_table(f'{self.vo.context}naver_movie_dataset.csv', sep=',', encoding='UTF-8')
+        # corpus = pd.read_table(f'{self.vo.context}test_data/naver_movie_dataset_1.csv', sep=',', encoding='UTF-8')
+        corpus = pd.read_table(f'{self.vo.context}review_train.csv', sep=',', encoding='UTF-8')
         train_X = np.array(corpus)
         # 카테고리 0 (긍정) 1 (부정)
         n_class0 = len([1 for _, point in train_X if point > 3.5])
@@ -215,14 +274,24 @@ class NaverMovie(object):
                 for word in words:
                     counts[word][0 if point > 3.5 else 1] += 1
         word_counts = counts
-        print(f'word_counts ::: {word_counts}')
+        # print(f'word_counts ::: {dict(word_counts)}')
+        # word_counts = pd.DataFrame(dict(word_counts))
+        # word_counts.to_csv(f'{self.vo.context}test_data/word_counts.csv')
         '''
         word_counts ::: defaultdict(<function NaverMovie.naver_process.<locals>.<lambda> at 0x000002C0ED2BD550>, {})
         '''
+        k = 0.5
+        word_prob = [(w,
+                      (class0 + k) / (n_class0 + 2 * k),
+                      (class1 + k) / (n_class1 + 2 * k),
+                      )for w, (class0, class1) in counts.items()]
+        print(f'확률 : {word_prob}')
+
+        return word_prob
 
     def isNumber(self, doc):  # try : float 밖에 두어야 하는 이유?
         try:
-            float(doc)
+            float(doc) # 숫자의 형식을 소숫점 형식 (소숫점 이하 6자리?)
             return True
         except ValueError:
             return False
