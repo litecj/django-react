@@ -32,6 +32,11 @@ urlpatterns = [
     path('api/ai_trader/', include('admin.ai_trader.urls')),
     path('api/nlp/', include('admin.nlp.urls')),
     path('api/myNLP/', include('admin.myNLP.urls')),
+    path('api/myGAN/', include('admin.myGAN.urls')),
+    path('api/myCNN/', include('admin.myCNN.urls')),
+    path('api/myGRU/', include('admin.myGRU.urls')),
+    path('api/myLSTM/', include('admin.myLSTM.urls')),
+
 ]
 #
 # urlpatterns = [
