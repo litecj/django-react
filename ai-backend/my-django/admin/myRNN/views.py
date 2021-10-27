@@ -5,7 +5,7 @@ from rest_framework.parsers import JSONParser
 
 
 # Create your views here.
-from admin.rnn.models import MyRNN
+from admin.myRNN.models import MyRNN
 
 
 @api_view(['GET'])

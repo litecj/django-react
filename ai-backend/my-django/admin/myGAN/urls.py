@@ -1,8 +1,7 @@
 from django.conf.urls import url
 
-from admin.crawling import views
+from admin.myGAN import views
 
 urlpatterns = {
     url(r'process', views.process),
-    url(r'newsProcess', views.newsProcess),
 }

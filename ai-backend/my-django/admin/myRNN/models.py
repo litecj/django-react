@@ -56,7 +56,7 @@ class MyRNN(object):
     def __init__(self):
         self.vo = ValueObject()
         self.reader = Reader()
-        self.vo.context = 'admin/rnn/data/'
+        self.vo.context = 'admin/myRNN/data/'
 
 
     def ai_trader(self):

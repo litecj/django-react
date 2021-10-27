@@ -5,13 +5,14 @@ from rest_framework.parsers import JSONParser
 
 
 # Create your views here.
-from admin.myNLP.models import NaverMovie
+from admin.myNLP.models import NaverMovie, HomonymClassification
 
 
 @api_view(['GET'])
 @parser_classes([JSONParser])
-def imdb_process(request):
-    return JsonResponse({'Imdb().imdb_process()': 'SUCCESS'})
+def homonym_process(request):
+    HomonymClassification().process()
+    return JsonResponse({'Imdb().homonym_process()': 'SUCCESS'})
 
 @api_view(['GET'])
 @parser_classes([JSONParser])

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
 
-from admin.crawling.models import Crawling
+from admin.crawling.models import Crawling, NewsCrawling
 
 
 @api_view(['GET'])
@@ -13,3 +13,9 @@ from admin.crawling.models import Crawling
 def process(request):
     Crawling().process()
     return JsonResponse({'result': ' Crawling Process SUCCESS'})
+
+@api_view(['GET'])
+@parser_classes([JSONParser])
+def newsProcess(request):
+    NewsCrawling()
+    return JsonResponse({'result': ' NewsCrawling Process SUCCESS'})
