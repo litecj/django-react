@@ -3,17 +3,17 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 export default function UserDetail() {
-    const SERVER = 'http://localhost:8000/api/users/'
+    const SERVER = 'http://localhost:8000/api'
     const history = useHistory()
     const [detail, setDetail] = useState({
-        userId:'', username:'', password:'', email:'', name:'', regDate: new Date().toLocaleDateString()
+        username: '', name: '', birth: '', address: '', email: '', password: ''
     })
   
     const fetchOne = () => {
         const sessionUser = JSON.parse(localStorage.getItem('sessionUser'))
         console.log("디테일 들어왔어 " + JSON.stringify(sessionUser))
-        alert('사용자 아이디 : '+ sessionUser.userId)
-        axios.get(`${SERVER}/users/${sessionUser.userId}`)
+        alert('사용자 아이디 : '+ sessionUser.username)
+        axios.get(`${SERVER}/users/${sessionUser.username}`)
         .then(res => {
             setDetail(res.data)
         })
@@ -34,12 +34,12 @@ export default function UserDetail() {
   return (
     <div>
           <h1>회원 정보</h1>
-          <ul>
-              <li>
+          <ul> 
+              {/* <li>
                   <label>
                       <span>회원번호 : {detail.userId} </span>
                   </label>
-              </li>
+              </li> */}
               <li>    
                   <label>
                       아이디: <span> {detail.username} </span>
@@ -47,7 +47,7 @@ export default function UserDetail() {
               </li>
               <li>
                   <label>
-                      이메일: <span> {detail.email} </span>
+                      이름: <span> {detail.name} </span>
                   </label>
               </li>
               <li>
@@ -57,7 +57,17 @@ export default function UserDetail() {
               </li>
               <li>
                   <label>
-                      이름: <span> {detail.name} </span>
+                      생년월일: <span> {detail.birth} </span>
+                  </label>
+              </li>
+              <li>
+                  <label>
+                      이메일: <span> {detail.email} </span>
+                  </label>
+              </li>
+              <li>
+                  <label>
+                      주소: <span> {detail.address} </span>
                   </label>
               </li>
               <li>
