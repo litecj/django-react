@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 export default function UserDetail() {
-    const SERVER = 'http://localhost:8080'
+    const SERVER = 'http://localhost:8000/api/users/'
     const history = useHistory()
     const [detail, setDetail] = useState({
         userId:'', username:'', password:'', email:'', name:'', regDate: new Date().toLocaleDateString()

@@ -13,4 +13,4 @@ export { default as UserListForm} from 'features/user/components/UserListForm'
 export {default as userReucer} from 'features/user/userSlice'
 
 // user api
-export {default as userAPI} from 'features/user/userAPI'
+// export {default as userAPI} from 'features/user/userAPI'

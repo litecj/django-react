@@ -4,7 +4,7 @@ import { UserListForm } from '..';
 
 export default function UserList() {
   const [list, setList] = useState([])
-  const SERVER = 'http://localhost:8080'
+  const SERVER = 'http://localhost:8000/api'
 
 
   const  fetchList = () => {

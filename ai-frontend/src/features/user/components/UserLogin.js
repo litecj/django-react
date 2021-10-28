@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useHistory } from 'react-router-dom';
 
 export default function UserLogin() {
-  const SERVER = 'http://localhost:8080'
+  const SERVER = 'http://localhost:8000/api/'
   const [login, setLogin] = useState({})
   const {username, password} = login
   const history = useHistory()
@@ -26,7 +26,7 @@ export default function UserLogin() {
     userLogin(loginRequest)
     .then(res => {
       const user = JSON.stringify(res.data)
-      if(user.userId !== 0){
+      if(user.name !== ''){
         alert('로그인 성공, '+JSON.stringify(res.data))
         localStorage.setItem('sessionUser', JSON.stringify(res.data))
         history.push("/users/detail")}
@@ -44,7 +44,7 @@ export default function UserLogin() {
 
   }
   const userLogin = loginRequest => 
-    axios.post(`${SERVER}/users/login`, JSON.stringify(loginRequest),{headers})
+    axios.post(`${SERVER}users/login`, JSON.stringify(loginRequest),{headers})
   return (
     <form method="POST">
     <ul>

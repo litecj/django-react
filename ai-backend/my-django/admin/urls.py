@@ -21,7 +21,7 @@ from admin. user import views
 urlpatterns = [
     path('api/connect', include('admin.common.urls')),
     path('api/housing/', include('admin.housing.urls')),
-    path('api/users/', include('admin.user.urls')),
+    path('api/users', include('admin.user.urls')),
     path('api/crime/', include('admin.crime_seoul.urls')),
     path('api/crawling/', include('admin.crawling.urls')),
     path('api/tensor/', include('admin.tensor.urls')),
@@ -32,10 +32,9 @@ urlpatterns = [
     path('api/ai_trader/', include('admin.ai_trader.urls')),
     path('api/nlp/', include('admin.nlp.urls')),
     path('api/myNLP/', include('admin.myNLP.urls')),
-    path('api/myGAN/', include('admin.myGAN.urls')),
-    path('api/myCNN/', include('admin.myCNN.urls')),
-    path('api/myGRU/', include('admin.myGRU.urls')),
-    path('api/myLSTM/', include('admin.myLSTM.urls')),
+    # path('api/myCNN/', include('admin.myCNN.urls')),
+    # path('api/myGRU/', include('admin.myGRU.urls')),
+    # path('api/myLSTM/', include('admin.myLSTM.urls')),
 
 ]
 #

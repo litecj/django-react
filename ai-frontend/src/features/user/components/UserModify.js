@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 export default function UserModify() {
     const history = useHistory()
-    const SERVER = 'http://localhost:8080'
+    const SERVER = 'http://localhost:8000/api/users/'
     const sessionUser = JSON.parse(localStorage.getItem('sessionUser')); 
     const [modify, setModify] = useState({
       userId: sessionUser.userId,

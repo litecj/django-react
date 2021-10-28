@@ -15,8 +15,18 @@ export default function Home() {
         {sessionUser !== '' && <input type="button" value="로그아웃" onClick={logout}/> }
         {sessionUser === '' && <input type="button" value="로그인" onClick={e => history.push('/users/login')}/> }
         <h1>Home</h1>
-        {sessionUser === '' 
+            <h5> 
+            </h5>
+        {/* {sessionUser === ''
             ? <><button onClick = {e => history.push('/users/add')}>회원가입</button><button onClick = {e => history.push('/users/login')}>로그인</button></>
-            : <h1>{sessionUser.username} 안녕 :) <br/> 로그인 중이네? ...</h1> }
+            : <h1>{sessionUser.username} 안녕 :) <br/> 로그인 중이네? ...</h1> } */}
+
+        {sessionUser === '' &&  <><h1>안녕 :) <br/> 나와 동료가 될래...? </h1><button onClick = {e => history.push('/users/add')}>회원가입</button><button onClick = {e => history.push('/users/login')}>로그인</button></>}
+        {sessionUser !== '' &&  <><h1> 안녕 :) <br/>{ } 로그인 중이네? ...</h1></>}
+        {/* {JSON.stringify(sessionUser.username)}아 */}
+
     </>)
+
 }
+
+

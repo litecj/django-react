@@ -16,12 +16,12 @@ import { useHistory } from 'react-router';
 
 export default function UserAdd() {
     const history = useHistory()
-    const SERVER = 'http://localhost:8080'
+    const SERVER = 'http://localhost:8000/api/'
     const [join, setJoin] = useState({
-        username:'', password:'', email:'', name:'', regDate: new Date().toLocaleDateString()
+        username: '', name: '', birth: '', address: '', email: '', password: ''
     })
 
-    const {username, password, email, name} = join
+    const {username, password, email, name, birth, address} = join
     const handleChange = e =>{
         const {value, name} = e.target
         setJoin({
@@ -31,7 +31,7 @@ export default function UserAdd() {
     }
     
     const userJoin = joinRequest => 
-            axios.post(`${SERVER}/users`, JSON.stringify(joinRequest),{headers})
+            axios.post(`${SERVER}users`, JSON.stringify(joinRequest),{headers})
     const headers = {
         'Content-Type' : 'application/json',
         'Authorization': 'JWT fefege..'
@@ -81,6 +81,16 @@ export default function UserAdd() {
                 </li> */}
                 <li>
                     <label>
+                        생년월일: <input type="date" id="birth" name= 'birth' value={birth} onChange = {handleChange}/>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        주소: <input type="address" id="address" name= 'address' value={address} onChange = {handleChange}/>
+                    </label>
+                </li>
+                <li>
+                    <label>
                         이름: <input type="text" id="name" name='name' value={name} onChange = {handleChange}/>
                         {/* <input type="hidden" id="reg_date" name='reg_date' value={} /> */}
                     </label>
@@ -93,3 +103,5 @@ export default function UserAdd() {
     </div>
   );
 }
+
+

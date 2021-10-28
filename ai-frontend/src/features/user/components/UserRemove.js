@@ -6,7 +6,7 @@ export default function UserRemove() {
   const [password, setPassword] = useState({})
   const sessionUser = JSON.parse(localStorage.getItem('sessionUser'));
   const history = useHistory()
-  const SERVER = 'http://localhost:8080'
+  const SERVER = 'http://localhost:8000/api/users/'
   const headers = {
     'Content-Type' : 'application/json',
     'Authorization': 'JWT fefege..'
@@ -19,7 +19,7 @@ export default function UserRemove() {
     e.preventDefault()
     const removeRequest = sessionUser
     if(sessionUser.password === password){
-      axios.delete(`${SERVER}/users/${sessionUser.userId}`, JSON.stringify(sessionUser.userId), {headers})
+      axios.delete(`${SERVER}/users/${sessionUser.username}`, JSON.stringify(sessionUser.username), {headers})
       .then(res => {
         console.log(res.data)
         localStorage.setItem('sessionUser', '')
@@ -38,11 +38,11 @@ export default function UserRemove() {
           <h1>User Remove</h1>
           <form method="DELETE">
             <ul>
-              <li>
+              {/* <li>
                 <label>
                     <span>회원번호 : {sessionUser.userId} </span>
                 </label>
-              </li>
+              </li> */}
               <li>    
                 <label>
                     아이디: <span> {sessionUser.username} </span>
