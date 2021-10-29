@@ -6,7 +6,7 @@ export default function UserRemove() {
   const [password, setPassword] = useState({})
   const sessionUser = JSON.parse(localStorage.getItem('sessionUser'));
   const history = useHistory()
-  const SERVER = 'http://localhost:8000/api/'
+  const SERVER = 'http://localhost:8000/api/users'
   const headers = {
     'Content-Type' : 'application/json',
     'Authorization': 'JWT fefege..'
@@ -19,7 +19,7 @@ export default function UserRemove() {
     e.preventDefault()
     const removeRequest = sessionUser
     if(sessionUser.password === password){
-      axios.delete(`${SERVER}users/${sessionUser.username}`, JSON.stringify(sessionUser.username), {headers})
+      axios.delete(`${SERVER}/check/${sessionUser.username}`, JSON.stringify(sessionUser.username), {headers})
       .then(res => {
         console.log(res.data)
         localStorage.setItem('sessionUser', '')

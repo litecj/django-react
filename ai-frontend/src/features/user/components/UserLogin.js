@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useHistory } from 'react-router-dom';
 
 export default function UserLogin() {
-  const SERVER = 'http://localhost:8000/api/'
+  const SERVER = 'http://localhost:8000/api/users'
   const [login, setLogin] = useState({})
   const {username, password} = login
   const history = useHistory()
@@ -19,6 +19,12 @@ export default function UserLogin() {
     'Content-Type' : 'application/json',
     'Authorization': 'JWT fefege..'
   }
+  const changeNull = ls =>{
+    for(const i of ls ){
+      document.getElementById(i).value = ''
+    }
+  }
+
   const handleClick = e => {
     e.preventDefault()
     e.stopPropagation()
@@ -26,25 +32,27 @@ export default function UserLogin() {
     userLogin(loginRequest)
     .then(res => {
       const user = JSON.stringify(res.data)
-      if(user.name !== ''){
+      if(user.username !== ''){
         alert('로그인 성공, '+JSON.stringify(res.data))
         localStorage.setItem('sessionUser', JSON.stringify(res.data))
         history.push("/users/detail")}
       else{
         alert('아이디, 비번 오류로 인한 로그인 실패, '+JSON.stringify(res.data))
-        document.getElementById('username').value = ''
-        document.getElementById('password').value = ''
-        history.push("/users/login")}
-      
+        changeNull(['username','password'])
+        // document.getElementById('username').value = ''
+        // document.getElementById('password').value = ''
+        // history.push("/users/login")}
+      }
 
     })
     .catch(err => {
       alert('접속 실패' + err)
+      changeNull(['username','password'])
     })
 
   }
   const userLogin = loginRequest => 
-    axios.post(`${SERVER}users/login`, JSON.stringify(loginRequest),{headers})
+    axios.post(`${SERVER}/login`, JSON.stringify(loginRequest),{headers})
   return (
     <form method="POST">
     <ul>

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 export default function UserDetail() {
-    const SERVER = 'http://localhost:8000/api'
+    const SERVER = 'http://localhost:8000/api/users'
     const history = useHistory()
     const [detail, setDetail] = useState({
         username: '', name: '', birth: '', address: '', email: '', password: ''
@@ -13,7 +13,7 @@ export default function UserDetail() {
         const sessionUser = JSON.parse(localStorage.getItem('sessionUser'))
         console.log("디테일 들어왔어 " + JSON.stringify(sessionUser))
         alert('사용자 아이디 : '+ sessionUser.username)
-        axios.get(`${SERVER}/users/${sessionUser.username}`)
+        axios.get(`${SERVER}/check/${sessionUser.username}`)
         .then(res => {
             setDetail(res.data)
         })

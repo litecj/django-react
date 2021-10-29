@@ -13,7 +13,7 @@ const UserListForm = ({list}) => {
                         <th>사용자 이메일</th>
                     </tr> 
             </thead>
-            
+
             <tbody>
                 {list.map((user)=>(
                     <tr>
