@@ -19,9 +19,9 @@ def users(request):
         return JsonResponse(data=serializer, safe=False)
     elif request.method == 'POST':
         ic('=====회원가입 진입 ======= ')
-        new_user = request.data['body']
+        new_user = request.data
         ic(new_user)
-        serializer = UserSerializer(data = new_user['user'])
+        serializer = UserSerializer(data = new_user)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse({'result' : f'Welcome, {serializer.data.get("name")}'}, status=201)

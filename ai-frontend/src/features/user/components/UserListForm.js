@@ -12,15 +12,16 @@ const UserListForm = ({list}) => {
                         <th>사용자 주소</th>
                         <th>사용자 이메일</th>
                     </tr> 
-            </thead> 
+            </thead>
+            
             <tbody>
-                {list.map((users)=>(
+                {list.map((user)=>(
                     <tr>
-                        <td>{users.username}</td>
-                        <td>{users.name}</td>
-                        <td>{users.birth}</td>
-                        <td>{users.address}</td>
-                        <td>{users.email}</td>
+                        <td>{user.username}</td>
+                        <td>{user.name}</td>
+                        <td>{user.birth}</td>
+                        <td>{user.address}</td>
+                        <td>{user.email}</td>
                     </tr>                
                 ))}
             </tbody>

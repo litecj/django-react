@@ -4,18 +4,18 @@ import { useHistory } from 'react-router-dom';
 
 export default function UserModify() {
     const history = useHistory()
-    const SERVER = 'http://localhost:8000/api/users/'
+    const SERVER = 'http://localhost:8000/api/users'
     const sessionUser = JSON.parse(localStorage.getItem('sessionUser')); 
     const [modify, setModify] = useState({
-      userId: sessionUser.userId,
       username:sessionUser.username,
       password:sessionUser.password,
       email:sessionUser.email,
       name:sessionUser.name,
-      regDate: sessionUser.regDate
+      birth: sessionUser.birth,
+      address: sessionUser.address
   })
 
-    const {userId, username, password, email, name} = modify
+    const {username, password, email, name, birth, address} = modify
     const handleChange = e => {
         const { value, name } = e.target
         setModify({
@@ -50,11 +50,6 @@ export default function UserModify() {
             <h1>User Modify</h1>
         <form onSubmit={handleSubmit} method='PUT'>
             <ul>
-                <li>
-                    <label>
-                        <span>회원번호 : {sessionUser.userId} </span>
-                    </label>
-                </li>
                 <li>    
                   <label>
                       아이디: <span> {sessionUser.username} </span>
@@ -62,12 +57,18 @@ export default function UserModify() {
                 </li>
                 <li>
                     <label>
-                        이메일: <input type="email" id="email" name ='email' placeholder={sessionUser.email} value={email} onChange = {handleChange}/>
+                        이름: <input type="text" id="name" name='name' placeholder={sessionUser.name} value={name} onChange = {handleChange}/>
+                        {/* <input type="hidden" id="reg_date" name='reg_date' value={} /> */}
                     </label>
                 </li>
                 <li>
                     <label>
                         비밀번호: <input type="password" id="password" name= 'password' placeholder={sessionUser.password} value={password} onChange = {handleChange}/>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        이메일: <input type="email" id="email" name ='email' placeholder={sessionUser.email} value={email} onChange = {handleChange}/>
                     </label>
                 </li>
                 {/* <li>
@@ -77,10 +78,16 @@ export default function UserModify() {
                 </li> */}
                 <li>
                     <label>
-                        이름: <input type="text" id="name" name='name' placeholder={sessionUser.name} value={name} onChange = {handleChange}/>
+                        생년월일: <input type="date" id="birth" name='birth' placeholder={sessionUser.birth} value={birth} onChange = {handleChange}/>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        주소: <input type="address" id="address" name='address' placeholder={sessionUser.address} value={address} onChange = {handleChange}/>
                         {/* <input type="hidden" id="reg_date" name='reg_date' value={} /> */}
                     </label>
                 </li>
+                
                 <li>
                     <input type="submit" value="수정확인" />
                 </li>
