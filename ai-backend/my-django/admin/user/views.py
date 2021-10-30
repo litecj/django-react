@@ -43,15 +43,17 @@ def check(request, username):         # 파라미터(매개변수)의 조건 값
     if request.method == 'GET':
         ic('======= 회원 개인 정보 진입 ======= ')
         ic(username)
-        detailUser = request.data
-        ic(detailUser)
-        dbUser = Member.objects.get(pk=detailUser['username'])
+        dbUser = Member.objects.get(pk=username)
         print(f'{type(dbUser)}')  # <class 'admin.user.models.User'>
         ic(dbUser)
         userSerializer = UserSerializer(dbUser, many=False)
         return JsonResponse(data=userSerializer.data, safe=False)
     elif request.method == 'DELETE':
         ic('======= 회원 정보 삭제 진입 ======= ')
+        ic(request.GET.get(''))
+        dbUser = Member.objects.get(pk=username)
+        dbUser.delete()
+        return JsonResponse(data="탈퇴 성공", safe=False)
 
 
 @api_view(['POST'])
