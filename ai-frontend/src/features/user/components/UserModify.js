@@ -29,7 +29,7 @@ export default function UserModify() {
         'Authorization': 'JWT fefege..'
     }
     const UserModify = modifyRequest => 
-              axios.put(`${SERVER}/users`, JSON.stringify(modifyRequest),{headers})
+              axios.put(`${SERVER}/list`, JSON.stringify(modifyRequest),{headers})
 
     const handleSubmit = e => {
     e.preventDefault()

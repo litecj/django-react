@@ -30,13 +30,21 @@ def users(request):
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT':
         ic('======= 회원 정보 수정 진입 ======= ')
-        # new_user = request.data
-        # ic(new_user)
-        # serializer = UserSerializer(data = new_user)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return JsonResponse({'result' : f'Welcome, {serializer.data.get("name")}'}, status=201)
-        return None
+        mod_user = request.data
+        ic(mod_user)
+        # ic(mod_user.keys())
+        dbUser = Member.objects.get(pk=mod_user['username'])
+        for i in mod_user.keys():
+            dbUser.i = mod_user[i]
+        # mod_serializer = UserSerializer(data=dbUser)
+        # if mod_serializer.is_valid():
+        dbUser.save()
+        serializer = UserSerializer(data=dbUser)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({'result' : f'Change, {serializer.data.get("name")}'}, status=201)
+        #     mod_serializer.save()
+        return JsonResponse(data=serializer.data, safe=False)
 
 @api_view(['DELETE', 'GET'])
 def check(request, username):         # 파라미터(매개변수)의 조건 값이 다르기에 오보로딩 하여 사용 가능 ??? 확인 必

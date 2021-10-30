@@ -9,12 +9,14 @@ export default function UserDetail() {
         username: '', name: '', birth: '', address: '', email: '', password: ''
     })
   
+    // const {username, name, birth, address, email, password} = detail
     const fetchOne = () => {
         const sessionUser = JSON.parse(localStorage.getItem('sessionUser'))
         console.log("디테일 들어왔어 " + JSON.stringify(sessionUser))
         alert('사용자 아이디 : '+ sessionUser.username)
         axios.get(`${SERVER}/check/${sessionUser.username}`)
         .then(res => {
+            alert(`회원정보 조회 성공: ${res.data}`)
             setDetail(res.data)
         })
         .catch(err => {
