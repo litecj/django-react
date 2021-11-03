@@ -19,15 +19,18 @@ def users(request):
         serializer = UserSerializer(all_users, many=True)
         ic(serializer.data)
         return JsonResponse(data=serializer.data, safe=False)
+
     elif request.method == 'POST':
         ic('======= 회원가입 진입 ======= ')
         new_user = request.data
         ic(new_user)
         serializer = UserSerializer(data = new_user)
+
         if serializer.is_valid():
             serializer.save()
             return JsonResponse({'result' : f'Welcome, {serializer.data.get("name")}'}, status=201)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     elif request.method == 'PUT':
         ic('======= 회원 정보 수정 진입 ======= ')
         mod_user = request.data
