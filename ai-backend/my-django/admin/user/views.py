@@ -29,6 +29,7 @@ def users(request):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse({'result' : f'Welcome, {serializer.data.get("name")}'}, status=201)
+
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'PUT':
@@ -37,20 +38,24 @@ def users(request):
         ic(mod_user)
         # ic(mod_user.keys())
         dbUser = Member.objects.get(pk=mod_user['username'])
+
         for i in mod_user.keys():
             dbUser.i = mod_user[i]
         # mod_serializer = UserSerializer(data=dbUser)
         # if mod_serializer.is_valid():
         dbUser.save()
         serializer = UserSerializer(data=dbUser)
+
         if serializer.is_valid():
             serializer.save()
             return JsonResponse({'result' : f'Change, {serializer.data.get("name")}'}, status=201)
         #     mod_serializer.save()
+
         return JsonResponse(data=serializer.data, safe=False)
 
 @api_view(['DELETE', 'GET'])
 def check(request, username):         # 파라미터(매개변수)의 조건 값이 다르기에 오보로딩 하여 사용 가능 ??? 확인 必
+
     if request.method == 'GET':
         ic('======= 회원 개인 정보 진입 ======= ')
         ic(username)
@@ -59,6 +64,7 @@ def check(request, username):         # 파라미터(매개변수)의 조건 값
         ic(dbUser)
         userSerializer = UserSerializer(dbUser, many=False)
         return JsonResponse(data=userSerializer.data, safe=False)
+
     elif request.method == 'DELETE':
         ic('======= 회원 정보 삭제 진입 ======= ')
         ic(request.GET.get(''))
@@ -70,6 +76,7 @@ def check(request, username):         # 파라미터(매개변수)의 조건 값
 @api_view(['POST'])
 @parser_classes([JSONParser])
 def login(request):
+
     try:
         ic('======= 회원 로그인 진입 ======= ')
         loginUser = request.data
@@ -78,11 +85,13 @@ def login(request):
         # serializer = UserSerializer(request.data, many=True)  # serializer : string 값  - 직렬화
         dbUser = Member.objects.get(pk=loginUser['username'])
         ic(dbUser)
+
         if loginUser['password'] == dbUser.password:
             ic('로그인 성공')
             userSerializer = UserSerializer(dbUser, many=False)
             ic(userSerializer)
             return JsonResponse(data=userSerializer.data, safe=False)
+
         else:
             print('비밀번호 오류')
             return JsonResponse(data={'result':'PASSWORD-FAIL'}, safe=False)
